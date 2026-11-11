@@ -21,7 +21,7 @@ function Navigation() {
 
   function handleLogout() {
     setShowMore(false);
-    window.location.href = "http://localhost:5182/";
+    window.location.href = "https://orbit-mu-pink.vercel.app/";
   }
 
   return (
@@ -136,3 +136,4 @@ function Navigation() {
 }
 
 export default Navigation;
+
