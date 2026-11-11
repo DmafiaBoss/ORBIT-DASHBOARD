@@ -1,0 +1,820 @@
+
+/* =========================================
+   ORBIT — STUDENT DASHBOARD
+   Dark futuristic interface
+========================================= */
+
+/* ---------- GLOBAL DASHBOARD ---------- */
+
+.dashboard {
+  width: 100%;
+  min-height: 100vh;
+  padding: 35px;
+  color: #f1f5f9;
+  background:
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(34, 211, 238, 0.055),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 35%,
+      rgba(124, 58, 237, 0.045),
+      transparent 32%
+    ),
+    #070d1b;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.dashboard * {
+  box-sizing: border-box;
+}
+
+/* ---------- TOPBAR ---------- */
+
+.dashboard-topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Search */
+
+.orbit-search {
+  width: 100%;
+  max-width: 550px;
+  height: 54px;
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 0 12px 0 18px;
+
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 13px;
+
+  transition: border-color 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+.orbit-search:focus-within {
+  border-color: rgba(34, 211, 238, 0.65);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.07);
+}
+
+.search-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.orbit-search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+
+  background: transparent;
+  border: none;
+  outline: none;
+
+  color: #f8fafc;
+  font-size: 14px;
+}
+
+.orbit-search input::placeholder {
+  color: #64748b;
+}
+
+/* Location button */
+
+.location-button {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(34, 211, 238, 0.16);
+  border-radius: 10px;
+
+  background: rgba(34, 211, 238, 0.07);
+  color: #22d3ee;
+
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.location-button:hover {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: rgba(34, 211, 238, 0.45);
+}
+
+/* Notifications */
+
+.notification-button {
+  position: relative;
+
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #a5b4d0;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 13px;
+
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.notification-button:hover {
+  color: #22d3ee;
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.notification-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+
+  width: 19px;
+  height: 19px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ef4444;
+  color: white;
+
+  border: 2px solid #070d1b;
+  border-radius: 50%;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Profile */
+
+.Circle {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  background-image: url("/Son Goku ✶.jfif");
+  background-size: cover;
+  background-position: center;
+
+  border: 2px solid rgba(34, 211, 238, 0.3);
+
+  cursor: pointer;
+  transition: transform 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.Circle:hover {
+  transform: scale(1.06);
+  border-color: #22d3ee;
+}
+
+.profile-name {
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  margin: 0;
+}
+
+/* ---------- WELCOME SECTION ---------- */
+
+.welcome-section {
+  min-height: 235px;
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  margin-top: 32px;
+  padding: 35px;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(5, 12, 29, 0.97) 0%,
+      rgba(5, 12, 29, 0.82) 45%,
+      rgba(5, 12, 29, 0.35) 100%
+    ),
+    url("/Neon Campus Nightscape.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 18px;
+
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-section h1 {
+  color: #f8fafc;
+  font-size: 35px;
+  font-weight: 750;
+  letter-spacing: -1.2px;
+  margin: 0 0 12px;
+}
+
+.welcome-section h1 span {
+  color: #22d3ee;
+  font-size: inherit;
+}
+
+.welcome-section > span {
+  color: #b7c5d9;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Explore button */
+
+.button {
+  width: fit-content;
+  min-height: 45px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-top: 25px;
+  padding: 9px 20px;
+
+  background: linear-gradient(
+    120deg,
+    #0891b2,
+    #6366f1
+  );
+
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+
+  font-size: 13px;
+  font-weight: 650;
+
+  cursor: pointer;
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 22px rgba(34, 211, 238, 0.2);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button__icon-wrapper {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  color: #0891b2;
+  background: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.button__icon-svg--copy {
+  position: absolute;
+  transform: translate(-150%, 150%);
+}
+
+.button:hover .button__icon-svg:first-child {
+  transition: transform 0.3s ease;
+  transform: translate(150%, -150%);
+}
+
+.button:hover .button__icon-svg--copy {
+  transition: transform 0.3s ease 0.1s;
+  transform: translate(0);
+}
+
+/* ---------- STATISTIC CARDS ---------- */
+
+.Cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.courses-card,
+.events-card,
+.announcements-card,
+.community-card {
+  position: relative;
+  overflow: hidden;
+
+  width: auto;
+  min-width: 0;
+  min-height: 160px;
+
+  padding: 20px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(17, 31, 54, 0.97),
+    rgba(8, 16, 32, 0.98)
+  );
+
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 16px;
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+
+  transition: transform 0.25s ease,
+              border-color 0.25s ease,
+              background 0.25s ease;
+}
+
+.courses-card:hover,
+.events-card:hover,
+.announcements-card:hover,
+.community-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(34, 211, 238, 0.4);
+}
+
+/* Individual card accents */
+
+.courses-card {
+  border-top: 2px solid rgba(0, 153, 255, 0.65);
+}
+
+.events-card {
+  border-top: 2px solid rgba(168, 85, 247, 0.65);
+}
+
+.announcements-card {
+  border-top: 2px solid rgba(0, 230, 168, 0.65);
+}
+
+.community-card {
+  border-top: 2px solid rgba(168, 85, 247, 0.65);
+}
+
+/* Card icon and growth indicator */
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.card-top svg {
+  width: 32px;
+  height: 32px;
+}
+
+.card-top .text {
+  color: #00d6a0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Card numbers */
+
+.courses-card h1,
+.events-card h1,
+.announcements-card h1,
+.community-card h1 {
+  color: #f8fafc;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -1px;
+  margin: 17px 0 4px;
+}
+
+.courses-card p,
+.events-card p,
+.announcements-card p,
+.community-card p {
+  color: #94a3b8;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ---------- LOWER DASHBOARD SECTIONS ---------- */
+
+.Footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 20px;
+  padding-top: 28px;
+}
+
+/* Events and announcement panels */
+
+.Events,
+.Announcement {
+  flex: 1;
+  min-width: 0;
+  min-height: 320px;
+
+  background: rgba(13, 24, 43, 0.88);
+
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 16px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Panel headings */
+
+.Events-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 20px;
+}
+
+.Events-top h1 {
+  flex: 1;
+  margin: 0;
+
+  color: #f1f5f9;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.Events-top svg {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: #22d3ee !important;
+}
+
+.ViewAll {
+  color: #22d3ee;
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+  text-decoration: none;
+
+  transition: color 0.2s ease;
+}
+
+.ViewAll:hover {
+  color: #a5f3fc;
+}
+
+/* Divider */
+
+.line {
+  height: 1px;
+  margin: 0 20px;
+  background: rgba(148, 163, 184, 0.13);
+}
+
+/* ---------- UPCOMING EVENTS ---------- */
+
+.Eventsid {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 13px 18px;
+
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+
+  transition: background 0.2s ease;
+}
+
+.dashboard-card:hover {
+  background: rgba(34, 211, 238, 0.035);
+}
+
+/* Date block */
+
+.date {
+  min-width: 51px;
+  height: 55px;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px;
+
+  background: rgba(34, 211, 238, 0.07);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  border-radius: 9px;
+}
+
+.date span {
+  color: #22d3ee;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1px;
+}
+
+.date h2 {
+  color: #f8fafc;
+  font-size: 21px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Event title and time */
+
+.title-time {
+  min-width: 0;
+  flex: 1;
+  padding: 0;
+}
+
+.dashboard-card h1 {
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.4;
+  margin: 0 0 5px;
+}
+
+.dashboard-card .title-time span {
+  color: #8493aa;
+  font-size: 11px;
+}
+
+/* Event categories */
+
+.event-category {
+  height: auto;
+  flex-shrink: 0;
+
+  padding: 6px 9px;
+  margin: 0;
+
+  border-radius: 20px;
+
+  font-size: 10px;
+  font-weight: 650;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.technical {
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+}
+
+.sports {
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+}
+
+.social {
+  background: rgba(168, 85, 247, 0.1);
+  color: #c084fc;
+}
+
+/* ---------- ANNOUNCEMENTS ---------- */
+
+.Announcementsid {
+  display: flex;
+  flex-direction: column;
+}
+
+.Announcements-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 15px 18px;
+
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+
+  transition: background 0.2s ease;
+}
+
+.Announcements-card:hover {
+  background: rgba(34, 211, 238, 0.035);
+}
+
+/* Announcement icon blocks */
+
+.Announcement-box {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+}
+
+.payment {
+  background: rgba(168, 85, 247, 0.13);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.library {
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+}
+
+.wifi {
+  background: rgba(0, 230, 168, 0.1);
+  border: 1px solid rgba(0, 230, 168, 0.3);
+}
+
+/* Announcement content */
+
+.title-category {
+  min-width: 0;
+  flex: 1;
+  padding: 0;
+}
+
+.Announcements-card h1 {
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.4;
+  margin: 0 0 5px;
+}
+
+.Announcements-card .Announcement-category {
+  display: block;
+  color: #8493aa;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.Announcements-card p {
+  flex-shrink: 0;
+  color: #64748b;
+  font-size: 10px;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+/* ---------- INTERACTION DETAILS ---------- */
+
+.dashboard a,
+.dashboard button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dashboard button:focus-visible,
+.dashboard a:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
+}
+
+/* ---------- RESPONSIVE LAYOUT ---------- */
+
+@media (max-width: 1200px) {
+  .Cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .Footer {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 850px) {
+  .dashboard {
+    padding: 25px;
+  }
+
+  .Footer {
+    flex-direction: column;
+  }
+
+  .Events,
+  .Announcement {
+    width: 100%;
+  }
+
+  .welcome-section {
+    padding: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 16px;
+  }
+
+  .dashboard-topbar {
+    flex-wrap: wrap;
+  }
+
+  .orbit-search {
+    max-width: none;
+    flex-basis: 100%;
+  }
+
+  .notification-button {
+    margin-left: 0;
+  }
+
+  .welcome-section {
+    min-height: 210px;
+    padding: 22px;
+  }
+
+  .welcome-section h1 {
+    font-size: 27px;
+  }
+
+  .welcome-section h1 span {
+    font-size: inherit;
+  }
+
+  .welcome-section > span {
+    font-size: 12px;
+  }
+
+  .Cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .courses-card,
+  .events-card,
+  .announcements-card,
+  .community-card {
+    min-height: 145px;
+    padding: 15px;
+  }
+
+  .courses-card h1,
+  .events-card h1,
+  .announcements-card h1,
+  .community-card h1 {
+    font-size: 25px;
+  }
+
+  .Events-top {
+    padding: 16px;
+  }
+
+  .Events-top h1 {
+    font-size: 16px;
+  }
+
+  .dashboard-card,
+  .Announcements-card {
+    padding: 12px;
+    gap: 9px;
+  }
+
+  .event-category {
+    font-size: 9px;
+    padding: 5px 7px;
+  }
+
+  .profile-name {
+    font-size: 12px;
+  }
+}
