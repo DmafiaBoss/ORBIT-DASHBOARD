@@ -15,8 +15,10 @@ import {
   ChevronRight,
   X,
   ArrowLeft,
+  Bookmark,
 } from "lucide-react";
 import { Link } from "react-router";
+import { useCampus } from "../context/CampusContext";
 import "./Announcements.css";
 
 const initialAnnouncements = [
@@ -109,6 +111,7 @@ const categories = [
 ];
 
 function Announcements() {
+  const { profile, pinnedAnnouncements, togglePinAnnouncement } = useCampus();
   const [announcements, setAnnouncements] = useState(
     initialAnnouncements
   );
@@ -121,6 +124,8 @@ function Announcements() {
   const unreadCount = announcements.filter(
     (item) => !item.read
   ).length;
+
+  const pinnedCount = Object.values(pinnedAnnouncements).filter(Boolean).length;
 
   const filteredAnnouncements = announcements.filter((item) => {
     const matchesSearch =
@@ -135,7 +140,8 @@ function Announcements() {
     const matchesFilter =
       activeFilter === "All" ||
       (activeFilter === "Unread" && !item.read) ||
-      (activeFilter === "Important" && item.important);
+      (activeFilter === "Important" && item.important) ||
+      (activeFilter === "Pinned" && !!pinnedAnnouncements[item.id]);
 
     return matchesSearch && matchesCategory && matchesFilter;
   });
@@ -190,8 +196,10 @@ function Announcements() {
           )}
         </Link>
 
-        <div className="announcement-avatar">OE</div>
-        <p className="announcement-profile-name">Olivia Emma</p>
+        <Link to="/settings" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="announcement-avatar">{profile.avatarInitials || "OE"}</div>
+          <p className="announcement-profile-name">{profile.fullName}</p>
+        </Link>
       </header>
 
       {/* PAGE INTRO */}
@@ -264,7 +272,7 @@ function Announcements() {
       {/* FILTERS */}
       <section className="announcement-controls">
         <div className="announcement-filter-tabs">
-          {["All", "Unread", "Important"].map((filter) => (
+          {["All", "Unread", "Important", "Pinned"].map((filter) => (
             <button
               key={filter}
               className={
@@ -272,7 +280,7 @@ function Announcements() {
               }
               onClick={() => setActiveFilter(filter)}
             >
-              {filter}
+              {filter === "Pinned" ? `Pinned (${pinnedCount})` : filter}
             </button>
           ))}
         </div>
@@ -351,6 +359,21 @@ function Announcements() {
                   </div>
 
                   <div className="announcement-item-actions">
+                    <button
+                      className="read-toggle"
+                      onClick={() => togglePinAnnouncement(item.id)}
+                      style={{
+                        color: pinnedAnnouncements[item.id] ? "#22D3EE" : "#64748b",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px"
+                      }}
+                      title={pinnedAnnouncements[item.id] ? "Unpin notice" : "Pin notice"}
+                    >
+                      <Bookmark size={14} fill={pinnedAnnouncements[item.id] ? "currentColor" : "none"} />
+                      {pinnedAnnouncements[item.id] ? "Pinned" : "Pin"}
+                    </button>
+
                     <button
                       className="read-toggle"
                       onClick={() => toggleRead(item.id)}

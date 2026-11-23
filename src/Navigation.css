@@ -59,6 +59,15 @@
   transition: all 0.3s ease;
 }
 
+.sidebar a.active,
+.sidebar-action.active {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: rgba(34, 211, 238, 0.4);
+  color: #22D3EE;
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.15);
+}
+
 .sidebar a:hover,
 .sidebar-action:hover {
   background: rgba(34, 211, 238, 0.10);

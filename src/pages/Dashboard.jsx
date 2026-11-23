@@ -7,65 +7,85 @@ import {
   Megaphone,
   CalendarDays,
   UsersRound,
+  Clock,
+  BookOpen,
+  X,
+  Wifi,
+  Bus,
+  CheckCircle2,
 } from "lucide-react";
-import { Link } from "react-router";
-
+import { Link, useNavigate } from "react-router";
+import { useCampus } from "../context/CampusContext";
 import "./Dashboard.css";
 
 function Dashboard() {
   const [search, setSearch] = useState("");
+  const [showCoursesModal, setShowCoursesModal] = useState(false);
+  const { profile, enrolledCourses, rsvps, pinnedAnnouncements } = useCampus();
+  const navigate = useNavigate();
 
-  const Events = [
+  const rsvpCount = Object.values(rsvps).filter(Boolean).length;
+  const pinnedCount = Object.values(pinnedAnnouncements).filter(Boolean).length;
+
+  const events = [
     {
       id: "1",
-      date: "Nov 15",
+      dateMonth: "NOV",
+      dateDay: "15",
       title: "Tech Workshop: Web Development",
-      time: "10:00 Am - 12:00PM",
+      time: "10:00 AM - 12:00 PM",
       category: "Technical",
     },
-
     {
       id: "2",
-      date: "Nov 18",
+      dateMonth: "NOV",
+      dateDay: "18",
       title: "Campus Sports Day",
-      time: "9:00 Am - 5:00PM",
+      time: "9:00 AM - 5:00 PM",
       category: "Sports",
     },
-
     {
       id: "3",
-      date: "Nov 20",
+      dateMonth: "NOV",
+      dateDay: "20",
       title: "Student Hangout",
-      time: "4:00 Am - 7:00PM",
+      time: "4:00 PM - 7:00 PM",
       category: "Social",
     },
   ];
 
-  const Announcements = [
+  const announcements = [
     {
       id: "1",
-      box: "payment ",
+      box: "payment",
       title: "School Fees Deadline Extended",
       category: "Payment deadline is now Nov 30, 2026.",
       time: "2h ago",
     },
-
     {
       id: "2",
-      box: " library",
+      box: "library",
       title: "New Library Hours",
-      category: "The library is now til 10PM daily.",
+      category: "The library is now open until 10PM daily.",
       time: "5h ago",
     },
-
     {
       id: "3",
-      box: "wifi ",
+      box: "wifi",
       title: "Campus WiFi Upgrade",
-      category: "Enjoy faster and more stable internet ",
+      category: "Enjoy faster and more stable internet across campus.",
       time: "1d ago",
     },
   ];
+
+  const filteredEvents = events.filter((ev) =>
+    ev.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredAnnouncements = announcements.filter((ann) =>
+    ann.title.toLowerCase().includes(search.toLowerCase()) ||
+    ann.category.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="dashboard">
@@ -75,32 +95,113 @@ function Dashboard() {
 
           <input
             type="text"
-            placeholder="Search events, places, announcements..."
+            placeholder="Search events, buildings, classes, notices..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <button className="location-button" type="button">
+          <button
+            className="location-button"
+            type="button"
+            onClick={() => navigate("/explore")}
+            title="Open Campus Explorer"
+          >
             <MapPin size={18} />
           </button>
         </div>
 
-        <Link to="/notifications" className="notification-button">
+        <Link to="/notifications" className="notification-button" title="View alerts">
           <Bell size={21} />
           <span className="notification-count">3</span>
         </Link>
-        <div className="Circle"></div>
-        <p className="profile-name">Olivia Emma</p>
+
+        <Link
+          to="/settings"
+          style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}
+          title="Account Settings"
+        >
+          <div
+            style={{
+              width: "42px",
+              height: "42px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #22D3EE, #6366F1)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#070b15",
+              fontWeight: "bold",
+              fontSize: "14px",
+              boxShadow: "0 0 12px rgba(34, 211, 238, 0.35)",
+            }}
+          >
+            {profile.avatarInitials || "OE"}
+          </div>
+          <p className="profile-name">{profile.fullName}</p>
+        </Link>
       </div>
 
       <section className="welcome-section">
         <h1>
-          Welcome back <span> Olivia! </span>🖐
+          Welcome back <span>{profile.fullName.split(" ")[0]}!</span> 🖐
         </h1>
 
-        <span>Stay Productive. Make the most of your Campus Life</span>
+        <span>Stay Productive. Make the most of your Campus Life with ORBIT.</span>
 
-        <button className="button" style={{ "--clr": "#7808d0" }} type="button">
+        {/* Live Campus Status Banner */}
+        <div style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "12px",
+          marginTop: "16px",
+          marginBottom: "16px",
+          fontSize: "12px",
+          color: "#94a3b8",
+        }}>
+          <span style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            background: "rgba(16, 185, 129, 0.12)",
+            border: "1px solid rgba(16, 185, 129, 0.25)",
+            padding: "5px 12px",
+            borderRadius: "999px",
+            color: "#10b981",
+          }}>
+            <BookOpen size={13} /> Library: Open until 10:00 PM
+          </span>
+          <span style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            background: "rgba(34, 211, 238, 0.12)",
+            border: "1px solid rgba(34, 211, 238, 0.25)",
+            padding: "5px 12px",
+            borderRadius: "999px",
+            color: "#22d3ee",
+          }}>
+            <Wifi size={13} /> Campus WiFi: Stable (eduroam)
+          </span>
+          <span style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            background: "rgba(168, 85, 247, 0.12)",
+            border: "1px solid rgba(168, 85, 247, 0.25)",
+            padding: "5px 12px",
+            borderRadius: "999px",
+            color: "#c084fc",
+          }}>
+            <Bus size={13} /> Campus Shuttle: Operating
+          </span>
+        </div>
+
+        <button
+          className="button"
+          style={{ "--clr": "#7808d0" }}
+          type="button"
+          onClick={() => navigate("/explore")}
+        >
           <span className="button__icon-wrapper">
             <svg
               viewBox="0 0 14 15"
@@ -128,117 +229,235 @@ function Dashboard() {
               />
             </svg>
           </span>
-          Explore All
+          Explore Campus Map
         </button>
       </section>
 
       <section className="Cards">
-        {/* Courses */}
-        <div className="courses-card">
+        {/* Courses: Interactive Modal */}
+        <div
+          className="courses-card"
+          onClick={() => setShowCoursesModal(true)}
+          style={{ cursor: "pointer" }}
+          title="Click to view course schedule"
+        >
           <div className="card-top">
             <GraduationCap size={40} color="#0099FF" />
-            <span className="text">↑ +1</span>
+            <span className="text">Schedule →</span>
           </div>
-
-          <h1>12</h1>
-          <p>Courses Enrolled</p>
+          <h1>{enrolledCourses.length}</h1>
+          <p>Enrolled Courses (View)</p>
         </div>
 
         {/* Events */}
-        <div className="events-card">
+        <Link to="/events" className="events-card" style={{ textDecoration: "none" }}>
           <div className="card-top">
             <CalendarDays size={40} color="#A855F7" />
-            <span className="text">↑ +1</span>
+            <span className="text">{rsvpCount > 0 ? `${rsvpCount} RSVP'd` : "+3 New"}</span>
           </div>
-
-          <h1>3</h1>
+          <h1>{events.length}</h1>
           <p>Upcoming Events</p>
-        </div>
+        </Link>
 
         {/* Announcements */}
-        <div className="announcements-card">
+        <Link to="/announcements" className="announcements-card" style={{ textDecoration: "none" }}>
           <div className="card-top">
             <Bell size={40} color="#00E6A8" />
-            <span className="text">↑ +2</span>
+            <span className="text">{pinnedCount > 0 ? `${pinnedCount} Pinned` : "+2 New"}</span>
           </div>
-
           <h1>5</h1>
           <p>New Announcements</p>
-        </div>
+        </Link>
 
         {/* Community */}
-        <div className="community-card">
+        <Link to="/community" className="community-card" style={{ textDecoration: "none" }}>
           <div className="card-top">
             <UsersRound size={40} color="#A855F7" />
-            <span className="text">↑ +12%</span>
+            <span className="text">Active Feed</span>
           </div>
-
           <h1>1.2k</h1>
           <p>Campus Community</p>
-        </div>
+        </Link>
       </section>
 
       <section className="Footer">
         <div className="Events">
           <div className="Events-top">
-            <CalendarDays size={40} color="blue" />
+            <CalendarDays size={40} color="#38bdf8" />
             <h1>Upcoming Events</h1>
-            <Link to="/Events" className="ViewAll">
+            <Link to="/events" className="ViewAll">
               View All →
             </Link>
           </div>
           <div className="line"></div>
           <div className="Eventsid">
-            {Events.map((Events) => (
-              <div className="dashboard-card" key={Events.id}>
-                <div className="date">
-                  <span>NOV</span>
-                  <h2>12</h2>
-                </div>
-                <div className="title-time">
-                  <h1>{Events.title}</h1>
-                  <span>{Events.time}</span>
-                </div>
-                <p
-                  className={`event-category ${Events.category.toLowerCase()}`}
+            {filteredEvents.length > 0 ? (
+              filteredEvents.map((item) => (
+                <div
+                  className="dashboard-card"
+                  key={item.id}
+                  onClick={() => navigate("/events")}
+                  style={{ cursor: "pointer" }}
                 >
-                  {Events.category}
-                </p>
-              </div>
-            ))}
+                  <div className="date">
+                    <span>{item.dateMonth}</span>
+                    <h2>{item.dateDay}</h2>
+                  </div>
+                  <div className="title-time">
+                    <h1>{item.title}</h1>
+                    <span>
+                      <Clock size={12} style={{ marginRight: 4, verticalAlign: "middle" }} />
+                      {item.time}
+                    </span>
+                  </div>
+                  <p className={`event-category ${item.category.toLowerCase()}`}>
+                    {item.category}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p style={{ color: "#64748b", padding: "15px 0" }}>No matching events found</p>
+            )}
           </div>
-          
         </div>
 
         <div className="Announcement">
           <div className="Events-top">
-            <Megaphone size={40} color="red" />
-            <h1>Announcement</h1>
-            <Link to="/Announcements" className="ViewAll">
+            <Megaphone size={40} color="#f87171" />
+            <h1>Announcements</h1>
+            <Link to="/announcements" className="ViewAll">
               View All →
             </Link>
           </div>
 
           <div className="line"></div>
 
-        <div className="Announcementsid">
-  {Announcements.map((announcement) => (
-    <div className="Announcements-card" key={announcement.id}>
+          <div className="Announcementsid">
+            {filteredAnnouncements.length > 0 ? (
+              filteredAnnouncements.map((announcement) => (
+                <div
+                  className="Announcements-card"
+                  key={announcement.id}
+                  onClick={() => navigate("/announcements")}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div className={`Announcement-box ${announcement.box.trim()}`}></div>
 
-      <div className={`Announcement-box ${announcement.box.trim()}`}></div>
+                  <div className="title-category">
+                    <h1>{announcement.title}</h1>
+                    <span className="Announcement-category">{announcement.category}</span>
+                  </div>
 
-      <div className="title-category">
-        <h1>{announcement.title}</h1>
-        <span className="Announcement-category ">{announcement.category}</span>
-      </div>
-
-      <p>{announcement.time}</p>
-
-    </div>
-  ))}
-</div>
+                  <p>{announcement.time}</p>
+                </div>
+              ))
+            ) : (
+              <p style={{ color: "#64748b", padding: "15px 0" }}>No matching announcements</p>
+            )}
+          </div>
         </div>
       </section>
+
+      {/* Enrolled Courses Modal */}
+      {showCoursesModal && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(6px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            padding: "20px",
+          }}
+          onClick={() => setShowCoursesModal(false)}
+        >
+          <div
+            style={{
+              background: "#0f172a",
+              border: "1px solid rgba(34, 211, 238, 0.3)",
+              borderRadius: "18px",
+              maxWidth: "650px",
+              width: "100%",
+              maxHeight: "85vh",
+              overflowY: "auto",
+              boxShadow: "0 20px 45px rgba(0, 0, 0, 0.6)",
+              color: "#f8fafc",
+              padding: "24px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+              <div>
+                <h2 style={{ margin: "0 0 4px", fontSize: "22px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <GraduationCap color="#22D3EE" size={26} /> My Enrolled Courses
+                </h2>
+                <p style={{ margin: 0, color: "#94a3b8", fontSize: "13px" }}>
+                  Current Semester Schedule • {profile.department}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowCoursesModal(false)}
+                style={{
+                  background: "rgba(255, 255, 255, 0.08)",
+                  border: "none",
+                  color: "#fff",
+                  borderRadius: "50%",
+                  width: "32px",
+                  height: "32px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {enrolledCourses.map((course) => (
+                <div
+                  key={course.id}
+                  style={{
+                    background: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    borderRadius: "12px",
+                    padding: "16px",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
+                    <div>
+                      <span style={{ fontSize: "11px", fontWeight: "bold", color: "#22D3EE", letterSpacing: "1px" }}>
+                        {course.code} • {course.credits} Credits
+                      </span>
+                      <h4 style={{ margin: "4px 0 0", fontSize: "16px" }}>{course.name}</h4>
+                    </div>
+                    <span style={{
+                      background: "rgba(34, 211, 238, 0.15)",
+                      color: "#22D3EE",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      padding: "2px 8px",
+                      borderRadius: "6px",
+                    }}>
+                      Grade: {course.grade}
+                    </span>
+                  </div>
+
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", fontSize: "13px", color: "#94a3b8" }}>
+                    <span>📍 {course.room}</span>
+                    <span>🕒 {course.schedule}</span>
+                    <span>👤 {course.instructor}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,12 +1,118 @@
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+:root {
+  --bg-primary: #070d1b;
+  --bg-secondary: #0d1729;
+  --bg-card: rgba(17, 31, 54, 0.95);
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border-color: rgba(148, 163, 184, 0.15);
+  --accent: #22d3ee;
+  color-scheme: dark;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background: #080D19;
   color: white;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Light Mode Overrides */
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --accent: #0284c7;
+  color-scheme: light;
+}
+
+[data-theme="light"] body {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+[data-theme="light"] .dashboard,
+[data-theme="light"] .events-page,
+[data-theme="light"] .explore-page,
+[data-theme="light"] .announcements-page,
+[data-theme="light"] .community-page,
+[data-theme="light"] .settings-page,
+[data-theme="light"] .notifications-page {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .sidebar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-right-color: #e2e8f0 !important;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .sidebar h2 {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .sidebar a,
+[data-theme="light"] .sidebar-action {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .sidebar a.active,
+[data-theme="light"] .sidebar-action.active {
+  background: rgba(2, 132, 199, 0.12) !important;
+  border-color: #0284c7 !important;
+  color: #0284c7 !important;
+}
+
+[data-theme="light"] .orbit-search,
+[data-theme="light"] .events-search,
+[data-theme="light"] .explore-search,
+[data-theme="light"] .announcement-search,
+[data-theme="light"] .community-search,
+[data-theme="light"] .notifications-search {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+[data-theme="light"] .orbit-search input,
+[data-theme="light"] .events-search input,
+[data-theme="light"] .explore-search input,
+[data-theme="light"] .announcement-search input,
+[data-theme="light"] .community-search input,
+[data-theme="light"] .notifications-search input {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .courses-card,
+[data-theme="light"] .events-card,
+[data-theme="light"] .announcements-card,
+[data-theme="light"] .community-card,
+[data-theme="light"] .event-card,
+[data-theme="light"] .dashboard-card,
+[data-theme="light"] .Announcements-card,
+[data-theme="light"] .community-post-card,
+[data-theme="light"] .announcement-item,
+[data-theme="light"] .notification-card,
+[data-theme="light"] .settings-panel,
+[data-theme="light"] .explore-sidebar {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4 {
+  color: #0f172a !important;
 }

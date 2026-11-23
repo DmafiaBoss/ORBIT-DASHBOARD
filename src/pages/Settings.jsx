@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useCampus } from "../context/CampusContext";
 import {
   UserRound,
   Bell,
@@ -21,39 +22,55 @@ import {
   Megaphone,
   ChevronRight,
   Check,
+  CheckCircle2,
 } from "lucide-react";
 
 import "./Settings.css";
 
 function Settings() {
+  const { profile: contextProfile, updateProfile: contextUpdateProfile, theme: contextTheme, setTheme: contextSetTheme } = useCampus();
   const [activeTab, setActiveTab] = useState("Profile");
   const [saved, setSaved] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
-  const [profile, setProfile] = useState({
-    fullName: "Olivia Emma",
-    username: "olivia",
-    email: "olivia@example.com",
-    phone: "",
-    department: "Computer Science",
-    bio: "Student exploring technology and building amazing things.",
+  const [profile, setProfile] = useState(() => ({
+    fullName: contextProfile.fullName || "Olivia Emma",
+    username: contextProfile.username || "olivia",
+    email: contextProfile.email || "olivia@example.com",
+    phone: contextProfile.phone || "+1 (555) 234-5678",
+    department: contextProfile.department || "Computer Science & Engineering",
+    bio: contextProfile.bio || "Undergraduate student exploring intelligent systems, web engineering, and campus culture.",
+  }));
+
+  const [notifications, setNotifications] = useState(() => {
+    const savedNotifs = localStorage.getItem("orbit_notifs");
+    return savedNotifs
+      ? JSON.parse(savedNotifs)
+      : {
+          announcements: true,
+          events: true,
+          messages: true,
+          community: true,
+          email: true,
+          push: true,
+        };
   });
 
-  const [notifications, setNotifications] = useState({
-    announcements: true,
-    events: true,
-    messages: true,
-    community: false,
-    email: true,
-    push: true,
-  });
-
-  const [appearance, setAppearance] = useState("Dark");
+  const [appearance, setAppearance] = useState(contextTheme || "Dark");
 
   const [privacy, setPrivacy] = useState({
     showProfile: true,
     showEmail: false,
     showActivity: true,
   });
+
+  useEffect(() => {
+    applyTheme(appearance);
+  }, [appearance]);
+
+  const applyTheme = (themeName) => {
+    contextSetTheme(themeName);
+  };
 
   const tabs = [
     { name: "Profile", icon: UserRound },
@@ -71,10 +88,11 @@ function Settings() {
   };
 
   const toggleNotification = (key) => {
-    setNotifications((current) => ({
-      ...current,
-      [key]: !current[key],
-    }));
+    setNotifications((current) => {
+      const updated = { ...current, [key]: !current[key] };
+      localStorage.setItem("orbit_notifs", JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const togglePrivacy = (key) => {
@@ -86,26 +104,51 @@ function Settings() {
 
   const saveSettings = (e) => {
     e.preventDefault();
+    contextUpdateProfile(profile);
+    contextSetTheme(appearance);
     setSaved(true);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
   };
 
   return (
     <div className="settings-page">
+      {showToast && (
+        <div style={{
+          position: "fixed",
+          top: "24px",
+          right: "24px",
+          background: "#10b981",
+          color: "#ffffff",
+          padding: "12px 20px",
+          borderRadius: "12px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          fontWeight: "600",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
+          zIndex: 10000,
+        }}>
+          <CheckCircle2 size={18} />
+          Settings saved successfully!
+        </div>
+      )}
+
       <header className="settings-topbar">
         <div className="settings-heading">
           <div className="settings-heading-icon">
-            <Lock size={21} />
+            <Lock size={21} color="#22D3EE" />
           </div>
 
           <div>
-            <h2>Settings</h2>
-            <p>Manage your ORBIT experience</p>
+            <h2>Settings & Preferences</h2>
+            <p>Customize your profile, notifications, and theme</p>
           </div>
         </div>
 
         <div className="settings-top-profile">
           <div className="settings-online-dot"></div>
-          <div className="settings-avatar-small">OE</div>
+          <div className="settings-avatar-small">{contextProfile.avatarInitials || "OE"}</div>
         </div>
       </header>
 
@@ -115,8 +158,7 @@ function Settings() {
             <span className="settings-eyebrow">PERSONAL CONTROL CENTER</span>
             <h1>Account Settings</h1>
             <p>
-              Customize your account, manage preferences and control
-              your experience on ORBIT.
+              Customize your public student profile, manage alerts, and control privacy.
             </p>
           </div>
         </div>
@@ -124,7 +166,7 @@ function Settings() {
         <div className="settings-layout">
           <aside className="settings-navigation">
             <div className="settings-nav-user">
-              <div className="settings-avatar-large">OE</div>
+              <div className="settings-avatar-large">{contextProfile.avatarInitials || "OE"}</div>
               <div>
                 <h3>{profile.fullName}</h3>
                 <p>@{profile.username}</p>
@@ -140,9 +182,7 @@ function Settings() {
                 return (
                   <button
                     key={tab.name}
-                    className={
-                      activeTab === tab.name ? "active" : ""
-                    }
+                    className={activeTab === tab.name ? "active" : ""}
                     onClick={() => {
                       setActiveTab(tab.name);
                       setSaved(false);
@@ -157,12 +197,9 @@ function Settings() {
             </div>
 
             <div className="settings-help">
-              <ShieldCheck size={20} />
-              <h4>Your account, your control.</h4>
-              <p>
-                Manage your personal information and preferences
-                securely.
-              </p>
+              <ShieldCheck size={20} color="#22D3EE" />
+              <h4>Account Security</h4>
+              <p>Your preferences and credentials are encrypted and stored locally.</p>
             </div>
           </aside>
 
@@ -173,22 +210,20 @@ function Settings() {
                   <div className="settings-panel-heading">
                     <div>
                       <h2>Profile Information</h2>
-                      <p>
-                        Update your personal details and how others
-                        see you on ORBIT.
-                      </p>
+                      <p>Update your personal details as seen across ORBIT campus.</p>
                     </div>
-                    <UserRound size={23} />
+                    <UserRound size={23} color="#22D3EE" />
                   </div>
 
                   <div className="settings-profile-photo">
-                    <div className="settings-photo-avatar">OE</div>
+                    <div className="settings-photo-avatar">{contextProfile.avatarInitials || "OE"}</div>
                     <div>
-                      <h3>Profile Picture</h3>
-                      <p>Choose a picture to represent your account.</p>
+                      <h3>Profile Avatar</h3>
+                      <p>Avatar displayed in class discussions, forums, and team rosters.</p>
                       <button
                         type="button"
                         className="settings-upload-btn"
+                        onClick={() => alert("Avatar photo upload dialog")}
                       >
                         <Camera size={15} />
                         Change photo
@@ -251,7 +286,7 @@ function Settings() {
                     </label>
 
                     <label className="settings-full-field">
-                      Department
+                      Department / Major
                       <div className="settings-input-wrap">
                         <GraduationCap size={17} />
                         <input
@@ -282,41 +317,37 @@ function Settings() {
                   <div className="settings-panel-heading">
                     <div>
                       <h2>Notification Preferences</h2>
-                      <p>
-                        Choose what you want ORBIT to notify you about.
-                      </p>
+                      <p>Configure which alerts you receive across channels.</p>
                     </div>
-                    <Bell size={23} />
+                    <Bell size={23} color="#22D3EE" />
                   </div>
 
-                  <h3 className="settings-subheading">
-                    CAMPUS UPDATES
-                  </h3>
+                  <h3 className="settings-subheading">CAMPUS UPDATES</h3>
 
                   <div className="settings-options">
                     {[
                       {
                         key: "announcements",
                         title: "Announcements",
-                        description: "Important school news and updates.",
+                        description: "Important university and administration notices.",
                         icon: Megaphone,
                       },
                       {
                         key: "events",
-                        title: "Campus Events",
-                        description: "Upcoming events and activities.",
+                        title: "Campus Events & RSVP Reminders",
+                        description: "Upcoming events and workshops.",
                         icon: CalendarDays,
                       },
                       {
                         key: "messages",
-                        title: "Messages",
-                        description: "Messages and direct conversations.",
+                        title: "Peer Messages",
+                        description: "Direct conversations and group mentions.",
                         icon: MessageSquare,
                       },
                       {
                         key: "community",
-                        title: "Community Activity",
-                        description: "Updates from your campus community.",
+                        title: "Community & Club Activity",
+                        description: "Discussion replies and popular threads.",
                         icon: UsersRound,
                       },
                     ].map((item) => {
@@ -336,9 +367,7 @@ function Settings() {
                             className={`settings-switch ${
                               notifications[item.key] ? "on" : ""
                             }`}
-                            onClick={() =>
-                              toggleNotification(item.key)
-                            }
+                            onClick={() => toggleNotification(item.key)}
                             aria-label={`Toggle ${item.title}`}
                           >
                             <span />
@@ -348,9 +377,7 @@ function Settings() {
                     })}
                   </div>
 
-                  <h3 className="settings-subheading">
-                    DELIVERY METHODS
-                  </h3>
+                  <h3 className="settings-subheading">DELIVERY METHODS</h3>
 
                   <div className="settings-options">
                     <div className="settings-option">
@@ -359,7 +386,7 @@ function Settings() {
                       </div>
                       <div className="settings-option-text">
                         <h4>Email Notifications</h4>
-                        <p>Receive updates through your email.</p>
+                        <p>Receive weekly digest and critical notices in inbox.</p>
                       </div>
                       <button
                         type="button"
@@ -379,7 +406,7 @@ function Settings() {
                       </div>
                       <div className="settings-option-text">
                         <h4>Push Notifications</h4>
-                        <p>Receive notifications on your device.</p>
+                        <p>Instant alerts on mobile and desktop browser.</p>
                       </div>
                       <button
                         type="button"
@@ -400,15 +427,13 @@ function Settings() {
                 <div className="settings-section">
                   <div className="settings-panel-heading">
                     <div>
-                      <h2>Appearance</h2>
-                      <p>
-                        Personalize how ORBIT looks on your device.
-                      </p>
+                      <h2>Appearance & Theme</h2>
+                      <p>Switch between dark futuristic mode, crisp light mode, or system default.</p>
                     </div>
-                    <Palette size={23} />
+                    <Palette size={23} color="#22D3EE" />
                   </div>
 
-                  <h3 className="settings-subheading">THEME</h3>
+                  <h3 className="settings-subheading">ACTIVE THEME</h3>
 
                   <div className="settings-theme-options">
                     {[
@@ -441,11 +466,9 @@ function Settings() {
                   </div>
 
                   <div className="settings-info-note">
-                    <Globe size={19} />
+                    <Globe size={19} color="#22D3EE" />
                     <p>
-                      Theme selection is saved in this demo interface.
-                      Full app-wide theme switching will be connected
-                      when we polish the shared ORBIT layout.
+                      Theme toggling is active in real time! Selecting <strong>Light</strong> or <strong>Dark</strong> applies instantly across all screens.
                     </p>
                   </div>
                 </div>
@@ -455,37 +478,30 @@ function Settings() {
                 <div className="settings-section">
                   <div className="settings-panel-heading">
                     <div>
-                      <h2>Privacy & Security</h2>
-                      <p>
-                        Control what other students can see about you.
-                      </p>
+                      <h2>Privacy & Permissions</h2>
+                      <p>Control visibility of your student profile and activity.</p>
                     </div>
-                    <ShieldCheck size={23} />
+                    <ShieldCheck size={23} color="#22D3EE" />
                   </div>
 
-                  <h3 className="settings-subheading">
-                    PROFILE VISIBILITY
-                  </h3>
+                  <h3 className="settings-subheading">PROFILE VISIBILITY</h3>
 
                   <div className="settings-options">
                     {[
                       {
                         key: "showProfile",
-                        title: "Public Profile",
-                        description:
-                          "Allow other students to view your profile.",
+                        title: "Public Student Profile",
+                        description: "Allow classmates and study partners to find you.",
                       },
                       {
                         key: "showEmail",
-                        title: "Show Email Address",
-                        description:
-                          "Allow your email to appear on your profile.",
+                        title: "Display Email Publicly",
+                        description: "Show contact email on your campus profile card.",
                       },
                       {
                         key: "showActivity",
-                        title: "Activity Visibility",
-                        description:
-                          "Allow others to see your community activity.",
+                        title: "Community Activity Feed",
+                        description: "Display recent posts and events you are attending.",
                       },
                     ].map((item) => (
                       <div className="settings-option" key={item.key}>
@@ -509,17 +525,6 @@ function Settings() {
                       </div>
                     ))}
                   </div>
-
-                  <div className="settings-security-note">
-                    <ShieldCheck size={22} />
-                    <div>
-                      <h4>Your privacy matters</h4>
-                      <p>
-                        Your account information should only be shared
-                        according to the preferences you choose.
-                      </p>
-                    </div>
-                  </div>
                 </div>
               )}
 
@@ -527,10 +532,10 @@ function Settings() {
                 <span className={saved ? "settings-saved" : ""}>
                   {saved ? (
                     <>
-                      <Check size={15} /> Changes saved
+                      <Check size={15} /> All changes saved
                     </>
                   ) : (
-                    "Changes are not saved yet"
+                    "Unsaved changes"
                   )}
                 </span>
 

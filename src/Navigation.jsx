@@ -1,7 +1,5 @@
-
 import { useState } from "react";
-import { Link } from "react-router";
-
+import { NavLink, Link } from "react-router";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -12,6 +10,7 @@ import {
   LogOut,
   MoreHorizontal,
   X,
+  Bell,
 } from "lucide-react";
 
 import "./Navigation.css";
@@ -21,16 +20,19 @@ function Navigation() {
 
   function handleLogout() {
     setShowMore(false);
-    window.location.href = "https://orbit-mu-pink.vercel.app/";
+    // Allow graceful fallback or redirect
+    if (window.confirm("Are you sure you want to log out of ORBIT?")) {
+      window.location.href = "https://orbit-mu-pink.vercel.app/";
+    }
   }
 
   return (
     <aside className="sidebar">
-      <div className="Header">
+      <Link to="/" className="Header" style={{ textDecoration: "none" }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="60"
-          height="60"
+          width="50"
+          height="50"
           viewBox="0 0 24 24"
           color="#22D3EE"
         >
@@ -43,38 +45,62 @@ function Navigation() {
         </svg>
 
         <h2>ORBIT</h2>
-      </div>
+      </Link>
 
       <div className="line"></div>
 
       <p className="menu-title">MENU</p>
 
       <nav className="nav-links">
-        <Link to="/">
-          <LayoutDashboard size={22} />
-          <span>Home</span>
-        </Link>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          <LayoutDashboard size={20} />
+          <span>Dashboard</span>
+        </NavLink>
 
-        <Link to="/events">
-          <CalendarDays size={22} />
+        <NavLink
+          to="/events"
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          <CalendarDays size={20} />
           <span>Events</span>
-        </Link>
+        </NavLink>
 
-        <Link to="/explore">
-          <MapPin size={22} />
-          <span>Explore</span>
-        </Link>
+        <NavLink
+          to="/explore"
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          <MapPin size={20} />
+          <span>Campus Map</span>
+        </NavLink>
 
         {/* Desktop navigation */}
-        <Link to="/Announcements" className="desktop-only-link">
-          <Megaphone size={22} />
+        <NavLink
+          to="/announcements"
+          className={({ isActive }) => `desktop-only-link ${isActive ? "active" : ""}`}
+        >
+          <Megaphone size={20} />
           <span>Announcements</span>
-        </Link>
+        </NavLink>
 
-        <Link to="/Community" className="desktop-only-link">
-          <UsersRound size={22} />
+        <NavLink
+          to="/community"
+          className={({ isActive }) => `desktop-only-link ${isActive ? "active" : ""}`}
+        >
+          <UsersRound size={20} />
           <span>Community</span>
-        </Link>
+        </NavLink>
+
+        <NavLink
+          to="/notifications"
+          className={({ isActive }) => `desktop-only-link ${isActive ? "active" : ""}`}
+        >
+          <Bell size={20} />
+          <span>Notifications</span>
+        </NavLink>
 
         {/* Mobile More menu */}
         <div className="mobile-more-wrap">
@@ -83,26 +109,31 @@ function Navigation() {
             onClick={() => setShowMore(!showMore)}
             type="button"
           >
-            {showMore ? <X size={22} /> : <MoreHorizontal size={22} />}
+            {showMore ? <X size={20} /> : <MoreHorizontal size={20} />}
             <span>More</span>
           </button>
 
           {showMore && (
             <div className="mobile-more-menu">
-              <Link to="/Announcements" onClick={() => setShowMore(false)}>
+              <NavLink to="/announcements" onClick={() => setShowMore(false)}>
                 <Megaphone size={19} />
                 <span>Announcements</span>
-              </Link>
+              </NavLink>
 
-              <Link to="/Community" onClick={() => setShowMore(false)}>
+              <NavLink to="/community" onClick={() => setShowMore(false)}>
                 <UsersRound size={19} />
                 <span>Community</span>
-              </Link>
+              </NavLink>
 
-              <Link to="/Settings" onClick={() => setShowMore(false)}>
+              <NavLink to="/notifications" onClick={() => setShowMore(false)}>
+                <Bell size={19} />
+                <span>Notifications</span>
+              </NavLink>
+
+              <NavLink to="/settings" onClick={() => setShowMore(false)}>
                 <Settings size={19} />
                 <span>Settings</span>
-              </Link>
+              </NavLink>
 
               <button type="button" onClick={handleLogout}>
                 <LogOut size={18} />
@@ -117,10 +148,13 @@ function Navigation() {
       <div className="sidebar-bottom">
         <div className="line"></div>
 
-        <Link to="/Settings" className="sidebar-action">
+        <NavLink
+          to="/settings"
+          className={({ isActive }) => `sidebar-action ${isActive ? "active" : ""}`}
+        >
           <Settings size={20} />
           <span>Settings</span>
-        </Link>
+        </NavLink>
 
         <button
           type="button"
@@ -136,4 +170,3 @@ function Navigation() {
 }
 
 export default Navigation;
-

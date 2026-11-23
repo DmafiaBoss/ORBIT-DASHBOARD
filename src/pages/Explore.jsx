@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-
 import {
   MapContainer,
   TileLayer,
@@ -20,104 +18,116 @@ import {
   X,
   HeartPulse,
   GraduationCap,
+  Clock,
+  Footprints,
+  Compass,
 } from "lucide-react";
 
 import "leaflet/dist/leaflet.css";
 import "./Explore.css";
-
-// ============================================
-// CAMPUS LOCATIONS
-// Each location has its own coordinates.
-// Coordinates are sample positions for testing.
-// Replace them with the real campus coordinates.
-// ============================================
 
 const locations = [
   {
     id: 1,
     name: "ORBIT Main Library",
     category: "Academic",
-    description: "A quiet space for studying, research and group learning.",
+    description: "Multi-floor study haven with private research cubicles, high-speed WiFi, and 24/7 exam access.",
     position: [6.515, 3.389],
     icon: BookOpen,
+    hours: "Open · Closes 10:00 PM",
+    distance: "3 min walk (240m)",
   },
   {
     id: 2,
     name: "Student Centre",
     category: "Social",
-    description: "Meet friends, relax and connect with other students.",
+    description: "The heart of student life: gaming lounges, student union offices, café, and meeting rooms.",
     position: [6.517, 3.392],
     icon: Building2,
+    hours: "Open · Closes 11:00 PM",
+    distance: "5 min walk (380m)",
   },
   {
     id: 3,
-    name: "Campus Café",
+    name: "Campus Artisanal Café",
     category: "Food",
-    description: "Grab a meal, coffee or a quick snack.",
+    description: "Specialty espresso, fresh pastries, smoothies, and comfortable seating with power outlets.",
     position: [6.513, 3.393],
     icon: Coffee,
+    hours: "Open · Closes 8:00 PM",
+    distance: "2 min walk (150m)",
   },
   {
     id: 4,
-    name: "Sports Complex",
+    name: "Sports Complex & Gym",
     category: "Sports",
-    description: "Facilities for fitness, sports and recreational activities.",
+    description: "Olympic swimming pool, basketball courts, fitness gym, and indoor running track.",
     position: [6.519, 3.387],
     icon: Dumbbell,
+    hours: "Open · Closes 9:00 PM",
+    distance: "8 min walk (620m)",
   },
   {
     id: 5,
-    name: "Innovation Hub",
+    name: "Innovation Hub & Makerspace",
     category: "Academic",
-    description: "A creative space for technology, projects and collaboration.",
+    description: "3D printers, hardware prototyping benches, VR headsets, and startup incubation workspaces.",
     position: [6.512, 3.386],
     icon: Building2,
+    hours: "Open · Closes 9:00 PM",
+    distance: "6 min walk (450m)",
   },
   {
     id: 6,
     name: "Student Affairs Office",
     category: "Administration",
-    description: "Student welfare and administrative support.",
+    description: "Guidance counseling, scholarship administration, ID card issuance, and welfare inquiries.",
     position: [6.516, 3.390],
     icon: Building2,
+    hours: "Open · Closes 4:30 PM",
+    distance: "4 min walk (310m)",
   },
   {
     id: 7,
-    name: "Medical Centre",
+    name: "University Health Centre",
     category: "Healthcare",
-    description: "Campus medical services and consultations.",
+    description: "24/7 emergency clinic, outpatient consultations, pharmacy, and wellness checks.",
     position: [6.514, 3.391],
     icon: HeartPulse,
+    hours: "Open 24/7",
+    distance: "4 min walk (290m)",
   },
   {
     id: 8,
-    name: "Sports Complex",
-    category: "Sports",
-    description: "Sports facilities and recreational activities.",
+    name: "Outdoor Amphitheatre",
+    category: "Social",
+    description: "Open-air theatre for drama productions, acoustic music nights, and campus rallies.",
     position: [6.520, 3.390],
-    icon: Dumbbell,
+    icon: Compass,
+    hours: "Open Daily",
+    distance: "10 min walk (750m)",
   },
   {
     id: 9,
-    name: "Faculty Buildings",
+    name: "Science & Engineering Complex",
     category: "Academic",
-    description: "Lecture rooms and faculty offices.",
+    description: "Cutting-edge computer labs, robotics workshop, chemistry research suites, and lecture halls.",
     position: [6.511, 3.388],
     icon: GraduationCap,
+    hours: "Open · Closes 8:00 PM",
+    distance: "7 min walk (500m)",
   },
   {
     id: 10,
-    name: "Cafeteria",
+    name: "Central Dining Commons",
     category: "Food",
-    description: "Food, snacks and refreshments.",
+    description: "Diverse meal plans, hot buffet, vegan options, fresh juice bar, and grab-and-go counters.",
     position: [6.513, 3.395],
     icon: Coffee,
+    hours: "Open · Closes 9:30 PM",
+    distance: "3 min walk (220m)",
   },
 ];
-
-// ============================================
-// AVAILABLE CATEGORIES
-// ============================================
 
 const categories = [
   "All",
@@ -128,11 +138,6 @@ const categories = [
   "Administration",
   "Healthcare",
 ];
-
-// ============================================
-// MAP CONTROLLER
-// Moves the map to the selected location.
-// ============================================
 
 function MapController({ selectedLocation }) {
   const map = useMap();
@@ -147,108 +152,66 @@ function MapController({ selectedLocation }) {
   return null;
 }
 
-// ============================================
-// MAIN EXPLORE COMPONENT
-// ============================================
-
 function Explore() {
-  // Stores the search input.
   const [search, setSearch] = useState("");
-
-  // Stores the currently selected category.
   const [activeCategory, setActiveCategory] = useState("All");
-
-  // Stores the selected campus location.
   const [selectedLocation, setSelectedLocation] = useState(null);
-
-  // Controls which group of locations is displayed.
   const [currentPage, setCurrentPage] = useState(0);
+  const [navigating, setNavigating] = useState(false);
 
-  // Number of locations displayed per page.
   const locationsPerPage = 5;
-
-  // ============================================
-  // SEARCH AND CATEGORY FILTERING
-  // ============================================
 
   const filteredLocations = locations.filter((location) => {
     const matchesCategory =
-      activeCategory === "All" ||
-      location.category === activeCategory;
+      activeCategory === "All" || location.category === activeCategory;
 
-    const matchesSearch = location.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
+    const matchesSearch =
+      location.name.toLowerCase().includes(search.toLowerCase()) ||
+      location.description.toLowerCase().includes(search.toLowerCase());
 
     return matchesCategory && matchesSearch;
   });
 
-  // ============================================
-  // PAGINATION
-  // ============================================
-
-  // Calculate the first location on the current page.
   const startIndex = currentPage * locationsPerPage;
-
-  // Display only five locations at a time.
   const visibleLocations = filteredLocations.slice(
     startIndex,
     startIndex + locationsPerPage
   );
 
-  // Calculate how many pages are needed.
-  const totalPages = Math.ceil(
-    filteredLocations.length / locationsPerPage
-  );
+  const totalPages = Math.ceil(filteredLocations.length / locationsPerPage);
 
-  // Move between pages.
   const changePage = (page) => {
     if (page < 0 || page >= totalPages) return;
-
     setCurrentPage(page);
     setSelectedLocation(null);
   };
 
+  const handleStartNavigation = () => {
+    setNavigating(true);
+    setTimeout(() => setNavigating(false), 3000);
+  };
+
   return (
     <div className="explore-page">
-
-      {/* ========================================
-          PAGE HEADER
-      ======================================== */}
-
       <header className="explore-header">
         <div>
           <h1>Campus Explorer</h1>
-          <p>Find your way around campus.</p>
+          <p>Navigate halls, research centers, dining spots, and sports arenas across ORBIT.</p>
         </div>
 
         <div className="explore-location-count">
           <MapPin size={17} />
-          <span>{filteredLocations.length} locations</span>
+          <span>{filteredLocations.length} locations active</span>
         </div>
       </header>
 
-
-      {/* ========================================
-          MAIN EXPLORE LAYOUT
-      ======================================== */}
-
       <div className="explore-layout">
-
-        {/* ======================================
-            SIDEBAR
-        ====================================== */}
-
         <aside className="explore-sidebar">
-
-          {/* SEARCH BAR */}
-
           <div className="explore-search">
             <Search size={18} />
-
             <input
               type="text"
-              placeholder="Search locations..."
+              placeholder="Search buildings, food, labs..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -258,18 +221,12 @@ function Explore() {
             />
           </div>
 
-
-          {/* CATEGORY FILTERS */}
-
           <div className="explore-categories">
             <h3>Categories</h3>
-
             {categories.map((category) => (
               <button
                 key={category}
-                className={
-                  activeCategory === category ? "active" : ""
-                }
+                className={activeCategory === category ? "active" : ""}
                 onClick={() => {
                   setActiveCategory(category);
                   setCurrentPage(0);
@@ -281,11 +238,8 @@ function Explore() {
             ))}
           </div>
 
-
-          {/* CAMPUS LOCATION LIST */}
-
           <div className="explore-places">
-            <h3>Campus locations</h3>
+            <h3>Campus Directory</h3>
 
             {visibleLocations.map((location) => {
               const LocationIcon = location.icon;
@@ -294,24 +248,17 @@ function Explore() {
                 <button
                   key={location.id}
                   className={`explore-place ${
-                    selectedLocation?.id === location.id
-                      ? "selected"
-                      : ""
+                    selectedLocation?.id === location.id ? "selected" : ""
                   }`}
                   onClick={() => setSelectedLocation(location)}
                 >
-
-                  {/* LOCATION ICON */}
-
                   <span className="place-icon">
                     <LocationIcon size={19} />
                   </span>
 
-                  {/* LOCATION DETAILS */}
-
                   <span className="place-details">
                     <strong>{location.name}</strong>
-                    <small>{location.category}</small>
+                    <small>{location.category} · {location.distance}</small>
                   </span>
 
                   <Navigation size={16} />
@@ -319,20 +266,11 @@ function Explore() {
               );
             })}
 
-
-            {/* NO RESULTS MESSAGE */}
-
             {filteredLocations.length === 0 && (
-              <p className="explore-no-results">
-                No locations found.
-              </p>
+              <p className="explore-no-results">No locations found.</p>
             )}
 
-
-            {/* PAGINATION BUTTONS */}
-
             <div className="buttons">
-
               <button
                 onClick={() => changePage(currentPage - 1)}
                 disabled={currentPage === 0}
@@ -342,9 +280,7 @@ function Explore() {
               </button>
 
               <span>
-                {totalPages === 0 ? 0 : currentPage + 1}
-                {" / "}
-                {totalPages}
+                {totalPages === 0 ? 0 : currentPage + 1} / {totalPages}
               </span>
 
               <button
@@ -354,81 +290,52 @@ function Explore() {
               >
                 ▶
               </button>
-
             </div>
           </div>
         </aside>
 
-
-        {/* ======================================
-            CAMPUS MAP
-        ====================================== */}
-
         <main className="explore-map-area">
-
           <MapContainer
             center={[6.515, 3.389]}
             zoom={16}
             scrollWheelZoom={true}
             className="campus-map"
           >
-
-            {/* OPENSTREETMAP TILE LAYER */}
-
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-
-            {/* MOVE MAP TO SELECTED LOCATION */}
-
             <MapController selectedLocation={selectedLocation} />
-
-
-            {/* MAP MARKERS */}
 
             {visibleLocations.map((location) => (
               <CircleMarker
                 key={location.id}
                 center={location.position}
-                radius={
-                  selectedLocation?.id === location.id ? 12 : 8
-                }
+                radius={selectedLocation?.id === location.id ? 12 : 8}
                 pathOptions={{
                   color: "#ffffff",
                   weight: 2,
-                  fillColor: "#00d9ff",
+                  fillColor: selectedLocation?.id === location.id ? "#22d3ee" : "#3b82f6",
                   fillOpacity: 1,
                 }}
                 eventHandlers={{
                   click: () => setSelectedLocation(location),
                 }}
               >
-
-                {/* MARKER POPUP */}
-
                 <Popup>
                   <strong>{location.name}</strong>
                   <br />
-                  {location.category}
+                  <span style={{ fontSize: "12px", color: "#64748b" }}>
+                    {location.category} · {location.hours}
+                  </span>
                 </Popup>
-
               </CircleMarker>
             ))}
-
           </MapContainer>
-
-
-          {/* ==================================
-              SELECTED LOCATION DETAILS
-          ================================== */}
 
           {selectedLocation && (
             <div className="explore-details">
-
-              {/* CLOSE DETAILS BUTTON */}
-
               <button
                 className="close-details"
                 onClick={() => setSelectedLocation(null)}
@@ -436,28 +343,47 @@ function Explore() {
                 <X size={18} />
               </button>
 
-              {/* LOCATION CATEGORY */}
-
               <span className="details-category">
                 {selectedLocation.category}
               </span>
 
-              {/* LOCATION NAME AND DESCRIPTION */}
-
               <h2>{selectedLocation.name}</h2>
-
               <p>{selectedLocation.description}</p>
 
-              {/* LOCATION INDICATOR */}
-
-              <div className="details-coordinate">
-                <MapPin size={16} />
-                Campus location
+              <div style={{ display: "flex", gap: "16px", margin: "14px 0", fontSize: "13px", color: "#94a3b8" }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                  <Clock size={15} color="#22d3ee" /> {selectedLocation.hours}
+                </span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                  <Footprints size={15} color="#a855f7" /> {selectedLocation.distance}
+                </span>
               </div>
 
+              <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
+                <button
+                  type="button"
+                  onClick={handleStartNavigation}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    background: navigating ? "#10b981" : "#22d3ee",
+                    color: "#0f172a",
+                    fontWeight: "bold",
+                    border: "none",
+                    borderRadius: "8px",
+                    padding: "8px 16px",
+                    fontSize: "13px",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  <Navigation size={15} />
+                  {navigating ? "Routing Calculated!" : "Start Walking Route"}
+                </button>
+              </div>
             </div>
           )}
-
         </main>
       </div>
     </div>
