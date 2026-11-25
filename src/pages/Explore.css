@@ -286,8 +286,9 @@
   }
 
   .explore-layout {
-    grid-template-columns: 250px minmax(0, 1fr);
-    gap: 14px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    min-height: auto;
   }
 
   .explore-sidebar {
@@ -295,11 +296,11 @@
   }
 
   .campus-map {
-    height: 600px;
+    height: 460px;
   }
 
   .explore-map-area {
-    min-height: 600px;
+    min-height: 460px;
   }
 }
 

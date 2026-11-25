@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   MapPin,
@@ -12,7 +12,6 @@ import {
   X,
   Wifi,
   Bus,
-  CheckCircle2,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useCampus } from "../context/CampusContext";
@@ -23,6 +22,15 @@ function Dashboard() {
   const [showCoursesModal, setShowCoursesModal] = useState(false);
   const { profile, enrolledCourses, rsvps, pinnedAnnouncements } = useCampus();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!showCoursesModal) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setShowCoursesModal(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showCoursesModal]);
 
   const rsvpCount = Object.values(rsvps).filter(Boolean).length;
   const pinnedCount = Object.values(pinnedAnnouncements).filter(Boolean).length;
@@ -399,6 +407,8 @@ function Dashboard() {
                 </p>
               </div>
               <button
+                type="button"
+                aria-label="Close enrolled courses modal"
                 onClick={() => setShowCoursesModal(false)}
                 style={{
                   background: "rgba(255, 255, 255, 0.08)",

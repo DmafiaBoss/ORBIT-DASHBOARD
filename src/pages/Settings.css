@@ -541,9 +541,9 @@
   background: #0e7490;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .settings-layout {
-    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-columns: 1fr;
     gap: 15px;
   }
 

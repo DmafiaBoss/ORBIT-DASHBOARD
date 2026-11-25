@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   CalendarDays,
@@ -73,7 +73,7 @@ const eventsData = [
     speaker: "Athletics Union",
     attendees: 520,
     icon: Trophy,
-    image: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop&q=80",
   },
   {
     id: 5,
@@ -141,6 +141,15 @@ function Events() {
   const [sortOrder, setSortOrder] = useState("earliest");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { profile, rsvps, toggleRSVP } = useCampus();
+
+  useEffect(() => {
+    if (!selectedEvent) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setSelectedEvent(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedEvent]);
 
   const handleRegisterToggle = (e, id) => {
     e.stopPropagation();
@@ -423,6 +432,8 @@ function Events() {
                 {selectedEvent.category}
               </span>
               <button
+                type="button"
+                aria-label="Close event details"
                 onClick={() => setSelectedEvent(null)}
                 style={{
                   background: "rgba(0, 0, 0, 0.5)",

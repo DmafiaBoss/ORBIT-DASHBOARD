@@ -726,6 +726,15 @@
     padding: 25px;
   }
 
+  .dashboard-topbar {
+    flex-wrap: wrap;
+  }
+
+  .orbit-search {
+    max-width: none;
+    min-width: 220px;
+  }
+
   .Footer {
     flex-direction: column;
   }

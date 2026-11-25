@@ -67,21 +67,12 @@ export function CampusProvider({ children }) {
     };
   });
 
-  // Watch for URL parameters on mount and clean up URL
+  // Clean query params from URL bar after initial mount if profile params were passed
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get("name") || params.get("user");
       if (nameParam) {
-        const newProfile = buildProfileFromName(
-          nameParam,
-          params.get("email"),
-          params.get("dept")
-        );
-        setProfile(newProfile);
-        localStorage.setItem("orbit_profile", JSON.stringify(newProfile));
-
-        // Clean query params from URL bar cleanly
         const cleanUrl = window.location.pathname;
         window.history.replaceState({}, document.title, cleanUrl);
       }

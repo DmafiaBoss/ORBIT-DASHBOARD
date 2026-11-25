@@ -310,6 +310,9 @@
 .event-sort select {
   max-width: 130px;
 
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   border: none;
   outline: none;
 

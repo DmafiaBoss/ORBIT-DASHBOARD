@@ -16,8 +16,6 @@ import {
   Code,
   Trophy,
   Music,
-  Check,
-  CornerDownRight,
 } from "lucide-react";
 import { Link } from "react-router";
 import { useCampus } from "../context/CampusContext";
@@ -234,7 +232,7 @@ function Community() {
         </div>
       </header>
 
-      <main className="community-content">
+      <div className="community-content">
         <section className="community-welcome">
           <div>
             <span className="community-eyebrow">ORBIT NETWORK</span>
@@ -338,8 +336,8 @@ function Community() {
                     </p>
 
                     <div className="community-post-stats">
-                      <span>{post.likes} likes</span>
-                      <span>{post.comments} comments</span>
+                      <span>{post.likes === 1 ? "1 like" : `${post.likes} likes`}</span>
+                      <span>{post.comments === 1 ? "1 comment" : `${post.comments} comments`}</span>
                     </div>
 
                     <div className="community-post-actions">
@@ -522,7 +520,7 @@ function Community() {
             </div>
           </aside>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

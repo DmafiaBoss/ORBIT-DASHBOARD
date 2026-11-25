@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   Bell,
@@ -120,6 +120,15 @@ function Announcements() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedAnnouncement, setSelectedAnnouncement] =
     useState(null);
+
+  useEffect(() => {
+    if (!selectedAnnouncement) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setSelectedAnnouncement(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedAnnouncement]);
 
   const unreadCount = announcements.filter(
     (item) => !item.read
@@ -424,6 +433,8 @@ function Announcements() {
             onClick={(e) => e.stopPropagation()}
           >
             <button
+              type="button"
+              aria-label="Close announcement details"
               className="announcement-modal-close"
               onClick={() => setSelectedAnnouncement(null)}
             >

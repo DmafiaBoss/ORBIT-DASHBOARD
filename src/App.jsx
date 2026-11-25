@@ -1,5 +1,5 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { lazy, Suspense, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router";
 import Navigation from "./Navigation";
 import { CampusProvider } from "./context/CampusContext";
 import "./App.css";
@@ -68,10 +68,19 @@ function PageSkeleton() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function App() {
   return (
     <CampusProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <div className="app-layout">
           <Navigation />
 

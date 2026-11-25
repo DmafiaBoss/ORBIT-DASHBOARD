@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCampus } from "../context/CampusContext";
 import {
   UserRound,
+  UsersRound,
   Bell,
   Palette,
   ShieldCheck,
@@ -30,7 +31,8 @@ import "./Settings.css";
 function Settings() {
   const { profile: contextProfile, updateProfile: contextUpdateProfile, theme: contextTheme, setTheme: contextSetTheme } = useCampus();
   const [activeTab, setActiveTab] = useState("Profile");
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState(true);
+  const [hasChanges, setHasChanges] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   const [profile, setProfile] = useState(() => ({
@@ -64,14 +66,6 @@ function Settings() {
     showActivity: true,
   });
 
-  useEffect(() => {
-    applyTheme(appearance);
-  }, [appearance]);
-
-  const applyTheme = (themeName) => {
-    contextSetTheme(themeName);
-  };
-
   const tabs = [
     { name: "Profile", icon: UserRound },
     { name: "Notifications", icon: Bell },
@@ -85,6 +79,7 @@ function Settings() {
       [e.target.name]: e.target.value,
     });
     setSaved(false);
+    setHasChanges(true);
   };
 
   const toggleNotification = (key) => {
@@ -93,6 +88,8 @@ function Settings() {
       localStorage.setItem("orbit_notifs", JSON.stringify(updated));
       return updated;
     });
+    setSaved(false);
+    setHasChanges(true);
   };
 
   const togglePrivacy = (key) => {
@@ -100,6 +97,8 @@ function Settings() {
       ...current,
       [key]: !current[key],
     }));
+    setSaved(false);
+    setHasChanges(true);
   };
 
   const saveSettings = (e) => {
@@ -107,6 +106,7 @@ function Settings() {
     contextUpdateProfile(profile);
     contextSetTheme(appearance);
     setSaved(true);
+    setHasChanges(false);
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };
@@ -152,7 +152,7 @@ function Settings() {
         </div>
       </header>
 
-      <main className="settings-content">
+      <div className="settings-content">
         <div className="settings-intro">
           <div>
             <span className="settings-eyebrow">PERSONAL CONTROL CENTER</span>
@@ -185,7 +185,6 @@ function Settings() {
                     className={activeTab === tab.name ? "active" : ""}
                     onClick={() => {
                       setActiveTab(tab.name);
-                      setSaved(false);
                     }}
                   >
                     <Icon size={18} />
@@ -452,7 +451,9 @@ function Settings() {
                           }`}
                           onClick={() => {
                             setAppearance(theme.name);
+                            contextSetTheme(theme.name);
                             setSaved(false);
+                            setHasChanges(true);
                           }}
                         >
                           <Icon size={25} />
@@ -529,8 +530,8 @@ function Settings() {
               )}
 
               <div className="settings-save-area">
-                <span className={saved ? "settings-saved" : ""}>
-                  {saved ? (
+                <span className={!hasChanges && saved ? "settings-saved" : ""}>
+                  {!hasChanges && saved ? (
                     <>
                       <Check size={15} /> All changes saved
                     </>
@@ -547,7 +548,7 @@ function Settings() {
             </form>
           </section>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
