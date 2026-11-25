@@ -45,17 +45,21 @@ function Settings() {
   }));
 
   const [notifications, setNotifications] = useState(() => {
-    const savedNotifs = localStorage.getItem("orbit_notifs");
-    return savedNotifs
-      ? JSON.parse(savedNotifs)
-      : {
-          announcements: true,
-          events: true,
-          messages: true,
-          community: true,
-          email: true,
-          push: true,
-        };
+    try {
+      const savedNotifs = localStorage.getItem("orbit_notifs");
+      if (savedNotifs) return JSON.parse(savedNotifs);
+    } catch (e) {
+      console.error("Failed to parse orbit_notifs, resetting:", e);
+      localStorage.removeItem("orbit_notifs");
+    }
+    return {
+      announcements: true,
+      events: true,
+      messages: true,
+      community: true,
+      email: true,
+      push: true,
+    };
   });
 
   const [appearance, setAppearance] = useState(contextTheme || "Dark");
