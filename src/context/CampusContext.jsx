@@ -11,12 +11,48 @@ const DEFAULT_COURSES = [
   { id: "CS390", name: "Senior Capstone Project", code: "CS 390", credits: 3, room: "Innovation Hub", instructor: "Dr. Claude Shannon", schedule: "Fri 02:00 - 04:00 PM", grade: "IP" }
 ];
 
+function buildProfileFromName(name, email, dept) {
+  const trimmed = name.trim();
+  const initials = trimmed
+    .split(/\s+/)
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "ST";
+
+  const username = trimmed.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  return {
+    fullName: trimmed,
+    username: username || "student",
+    email: email || `${username || "student"}@campus.edu`,
+    phone: "+1 (555) 234-5678",
+    department: dept || "Computer Science & Engineering",
+    bio: "Campus student exploring technology, web architecture, and student life.",
+    avatarInitials: initials,
+  };
+}
+
 export function CampusProvider({ children }) {
-  // Student Profile
+  // Student Profile: Read URL query param first, then localStorage, then fallback
   const [profile, setProfile] = useState(() => {
     try {
-      const saved = localStorage.getItem("orbit_profile");
-      if (saved) return JSON.parse(saved);
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const nameParam = params.get("name") || params.get("user");
+        if (nameParam) {
+          const newProfile = buildProfileFromName(
+            nameParam,
+            params.get("email"),
+            params.get("dept")
+          );
+          localStorage.setItem("orbit_profile", JSON.stringify(newProfile));
+          return newProfile;
+        }
+
+        const saved = localStorage.getItem("orbit_profile");
+        if (saved) return JSON.parse(saved);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -30,6 +66,27 @@ export function CampusProvider({ children }) {
       avatarInitials: "OE",
     };
   });
+
+  // Watch for URL parameters on mount and clean up URL
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get("name") || params.get("user");
+      if (nameParam) {
+        const newProfile = buildProfileFromName(
+          nameParam,
+          params.get("email"),
+          params.get("dept")
+        );
+        setProfile(newProfile);
+        localStorage.setItem("orbit_profile", JSON.stringify(newProfile));
+
+        // Clean query params from URL bar cleanly
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+    }
+  }, []);
 
   // Theme
   const [theme, setThemeState] = useState(() => {
@@ -74,12 +131,12 @@ export function CampusProvider({ children }) {
   const updateProfile = (newProfile) => {
     const initials = newProfile.fullName
       ? newProfile.fullName
-          .split(" ")
+          .split(/\s+/)
           .map((n) => n[0])
           .slice(0, 2)
           .join("")
           .toUpperCase()
-      : "OE";
+      : "ST";
 
     const updated = { ...newProfile, avatarInitials: initials };
     setProfile(updated);

@@ -133,7 +133,7 @@ const eventsData = [
   },
 ];
 
-const categories = ["All", "My RSVPs", "Technical", "Sports", "Social", "Academic"];
+const categories = ["All", "My Events", "Technical", "Sports", "Social", "Academic"];
 
 function Events() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -142,17 +142,17 @@ function Events() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { profile, rsvps, toggleRSVP } = useCampus();
 
-  const handleRSVPToggle = (e, id) => {
+  const handleRegisterToggle = (e, id) => {
     e.stopPropagation();
     toggleRSVP(id);
   };
 
   const filteredEvents = eventsData
     .filter((event) => {
-      const isRsvpSelected = activeCategory === "My RSVPs";
+      const isMyEventsSelected = activeCategory === "My Events";
       const matchesCategory =
         activeCategory === "All" ||
-        (isRsvpSelected ? !!rsvps[event.id] : event.category === activeCategory);
+        (isMyEventsSelected ? !!rsvps[event.id] : event.category === activeCategory);
 
       const matchesSearch =
         event.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -227,7 +227,7 @@ function Events() {
               }`}
               onClick={() => setActiveCategory(category)}
             >
-              {category === "My RSVPs" ? `My RSVPs (${Object.values(rsvps).filter(Boolean).length})` : category}
+              {category === "My Events" ? `My Events (${Object.values(rsvps).filter(Boolean).length})` : category}
             </button>
           ))}
         </div>
@@ -322,7 +322,7 @@ function Events() {
 
                         <button
                           type="button"
-                          onClick={(e) => handleRSVPToggle(e, event.id)}
+                          onClick={(e) => handleRegisterToggle(e, event.id)}
                           style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -340,11 +340,11 @@ function Events() {
                         >
                           {isRsvp ? (
                             <>
-                              <CheckCircle size={14} /> RSVP'd
+                              <CheckCircle size={14} /> Registered
                             </>
                           ) : (
                             <>
-                              <CalendarPlus size={14} /> RSVP
+                              <CalendarPlus size={14} /> Register
                             </>
                           )}
                         </button>
@@ -358,8 +358,8 @@ function Events() {
                 <CalendarDays size={35} />
                 <h3>No events found</h3>
                 <p>
-                  {activeCategory === "My RSVPs"
-                    ? "You haven't RSVP'd to any events yet. Browse events above and click RSVP!"
+                  {activeCategory === "My Events"
+                    ? "You haven't registered for any events yet. Browse events above and click Register!"
                     : "Try another search or category."}
                 </p>
               </div>
@@ -467,7 +467,7 @@ function Events() {
 
               <div style={{ display: "flex", gap: "12px" }}>
                 <button
-                  onClick={(e) => handleRSVPToggle(e, selectedEvent.id)}
+                  onClick={(e) => handleRegisterToggle(e, selectedEvent.id)}
                   style={{
                     flex: 1,
                     padding: "12px",
@@ -486,11 +486,11 @@ function Events() {
                 >
                   {rsvps[selectedEvent.id] ? (
                     <>
-                      <CheckCircle size={18} /> You're Attending
+                      <CheckCircle size={18} /> You're Registered
                     </>
                   ) : (
                     <>
-                      <CalendarPlus size={18} /> Confirm Attendance (RSVP)
+                      <CalendarPlus size={18} /> Register for Event
                     </>
                   )}
                 </button>

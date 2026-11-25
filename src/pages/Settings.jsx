@@ -334,7 +334,7 @@ function Settings() {
                       },
                       {
                         key: "events",
-                        title: "Campus Events & RSVP Reminders",
+                        title: "Campus Events & Registration Reminders",
                         description: "Upcoming events and workshops.",
                         icon: CalendarDays,
                       },

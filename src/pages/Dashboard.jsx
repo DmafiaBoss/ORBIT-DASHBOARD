@@ -253,7 +253,7 @@ function Dashboard() {
         <Link to="/events" className="events-card" style={{ textDecoration: "none" }}>
           <div className="card-top">
             <CalendarDays size={40} color="#A855F7" />
-            <span className="text">{rsvpCount > 0 ? `${rsvpCount} RSVP'd` : "+3 New"}</span>
+            <span className="text">{rsvpCount > 0 ? `${rsvpCount} Registered` : "+3 New"}</span>
           </div>
           <h1>{events.length}</h1>
           <p>Upcoming Events</p>
