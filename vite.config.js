@@ -11,22 +11,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (
-              id.includes('react/') ||
-              id.includes('react-dom/') ||
-              id.includes('react-router')
-            ) {
-              return 'vendor-react';
-            }
-            if (id.includes('leaflet') || id.includes('react-leaflet')) {
-              return 'vendor-maps';
-            }
-            if (id.includes('lucide-react')) {
-              return 'vendor-icons';
-            }
-            return 'vendor-common';
-          }
+          if (!id.includes('node_modules')) return;
+          if (/node_modules\/(react|react-dom|scheduler|react-router)\//.test(id)) return 'vendor-react';
+          if (/node_modules\/(leaflet|react-leaflet|@react-leaflet)\//.test(id)) return 'vendor-maps';
+          if (/node_modules\/lucide-react\//.test(id)) return 'vendor-icons';
+          return 'vendor-common';
         },
       },
     },
