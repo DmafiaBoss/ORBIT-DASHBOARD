@@ -60,9 +60,48 @@ body {
 }
 
 [data-theme="light"] .sidebar {
-  background: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
   border-right-color: #e2e8f0 !important;
-  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05) !important;
+  border-top-color: #e2e8f0 !important;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.06) !important;
+}
+
+@media (max-width: 768px) {
+  [data-theme="light"] .sidebar {
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08) !important;
+  }
+}
+
+[data-theme="light"] .mobile-more-button {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .mobile-more-button.active {
+  background: rgba(2, 132, 199, 0.12) !important;
+  border-color: #0284c7 !important;
+  color: #0284c7 !important;
+}
+
+[data-theme="light"] .mobile-more-menu {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.14) !important;
+}
+
+[data-theme="light"] .mobile-more-menu a,
+[data-theme="light"] .mobile-more-menu button {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .mobile-more-menu a.active,
+[data-theme="light"] .mobile-more-menu a:hover {
+  background: rgba(2, 132, 199, 0.1) !important;
+  color: #0284c7 !important;
+}
+
+[data-theme="light"] .mobile-more-menu button:hover {
+  color: #dc2626 !important;
+  background: rgba(239, 68, 68, 0.08) !important;
 }
 
 [data-theme="light"] .sidebar h2 {
@@ -264,4 +303,37 @@ body {
   background: linear-gradient(135deg, #e0f2fe, #ede9fe) !important;
   border-color: #bae6fd !important;
   color: #0f172a !important;
+}
+
+[data-theme="light"] .courses-modal,
+[data-theme="light"] .announcement-modal,
+[data-theme="light"] .announcement-list-section {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .courses-modal-card,
+[data-theme="light"] .community-comment-item,
+[data-theme="light"] .community-comment-form input,
+[data-theme="light"] .action-btn {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .courses-modal-close,
+[data-theme="light"] .announcement-modal-close {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .dashboard-card h1,
+[data-theme="light"] .Announcements-card h1,
+[data-theme="light"] .announcement-item-content h3,
+[data-theme="light"] .community-comment-item p,
+[data-theme="light"] .community-post-text,
+[data-theme="light"] .modal-description,
+[data-theme="light"] .notification-header h3 {
+  color: #1e293b !important;
 }

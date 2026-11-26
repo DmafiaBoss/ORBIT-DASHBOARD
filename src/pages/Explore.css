@@ -278,11 +278,47 @@
   font-size: 12px;
 }
 
+.explore-details-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 12px 0;
+  font-size: 12.5px;
+  color: #94a3b8;
+}
+
+.explore-details-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.explore-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #22d3ee;
+  color: #0f172a;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.explore-nav-btn.navigating {
+  background: #10b981;
+  color: #ffffff;
+}
+
 /* TABLET */
 
 @media (max-width: 1000px) {
   .explore-page {
-    padding: 24px;
+    padding: 20px;
   }
 
   .explore-layout {
@@ -296,11 +332,11 @@
   }
 
   .campus-map {
-    height: 460px;
+    height: 440px;
   }
 
   .explore-map-area {
-    min-height: 460px;
+    min-height: 440px;
   }
 }
 
@@ -310,17 +346,20 @@
   .explore-page {
     width: 100%;
     min-height: 100vh;
-    padding: 20px 14px 100px;
+    padding: 16px 14px 24px;
     overflow-x: hidden;
   }
 
   .explore-header {
+    flex-wrap: wrap;
     align-items: flex-start;
-    margin-bottom: 18px;
+    gap: 8px;
+    margin-bottom: 16px;
   }
 
   .explore-header h1 {
     font-size: 22px;
+    margin-bottom: 4px;
   }
 
   .explore-header p {
@@ -330,38 +369,45 @@
   .explore-location-count {
     gap: 5px;
     font-size: 11px;
-    padding-top: 5px;
+    padding-top: 2px;
   }
 
   .explore-layout {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
     min-height: auto;
   }
 
   .explore-sidebar {
     width: 100%;
-    padding: 15px;
+    padding: 14px;
     border-radius: 13px;
   }
 
   .explore-search {
-    padding: 12px;
+    padding: 11px 12px;
   }
 
   .explore-categories {
-    margin-top: 20px;
+    margin-top: 16px;
+    gap: 6px;
+  }
+
+  .explore-sidebar h3 {
+    margin-bottom: 8px;
+    font-size: 13px;
   }
 
   .explore-categories button {
-    padding: 8px 11px;
+    padding: 7px 11px;
+    margin: 0;
     font-size: 11px;
   }
 
   .explore-places {
-    margin-top: 18px;
-    max-height: 330px;
+    margin-top: 16px;
+    max-height: 245px;
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
@@ -378,38 +424,41 @@
 
   .explore-map-area {
     width: 100%;
-    min-height: 380px;
-    height: 380px;
+    min-height: 360px;
+    height: 360px;
     border-radius: 13px;
   }
 
   .campus-map {
     width: 100%;
-    height: 380px;
+    height: 360px;
   }
 
   .explore-details {
     bottom: 10px;
     left: 10px;
     width: calc(100% - 20px);
-    padding: 16px;
+    max-height: calc(100% - 20px);
+    overflow-y: auto;
+    padding: 14px;
     border-radius: 12px;
   }
 
   .explore-details h2 {
     font-size: 16px;
+    margin: 8px 24px 6px 0;
   }
 
   .explore-details p {
     font-size: 12px;
   }
 
-  .details-coordinate {
-    margin-top: 10px;
+  .explore-nav-btn {
+    width: 100%;
   }
 
   .buttons {
-    padding-bottom: 5px;
+    padding-bottom: 4px;
   }
 }
 
@@ -417,8 +466,7 @@
 
 @media (max-width: 380px) {
   .explore-page {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 14px 10px 20px;
   }
 
   .explore-header h1 {
@@ -434,13 +482,13 @@
   }
 
   .explore-categories button {
-    padding: 7px 9px;
-    font-size: 10px;
+    padding: 6px 10px;
+    font-size: 10.5px;
   }
 
   .explore-map-area,
   .campus-map {
-    height: 340px;
-    min-height: 340px;
+    height: 320px;
+    min-height: 320px;
   }
 }

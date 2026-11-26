@@ -198,6 +198,7 @@ function Announcements() {
         <Link
           to="/notifications"
           className="announcement-notification"
+          aria-label="View notifications"
         >
           <Bell size={21} />
           {unreadCount > 0 && (
@@ -205,7 +206,7 @@ function Announcements() {
           )}
         </Link>
 
-        <Link to="/settings" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
+        <Link to="/settings" className="announcement-profile-link">
           <div className="announcement-avatar">{profile.avatarInitials || "OE"}</div>
           <p className="announcement-profile-name">{profile.fullName}</p>
         </Link>

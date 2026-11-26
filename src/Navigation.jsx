@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { NavLink, Link } from "react-router";
+import { useState, useEffect, useRef } from "react";
+import { NavLink, Link, useLocation } from "react-router";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -17,6 +17,32 @@ import "./Navigation.css";
 
 function Navigation() {
   const [showMore, setShowMore] = useState(false);
+  const moreWrapRef = useRef(null);
+  const { pathname } = useLocation();
+
+  const isMoreRouteActive = ["/announcements", "/community", "/notifications", "/settings"].some(
+    (route) => pathname.toLowerCase() === route
+  );
+
+  useEffect(() => {
+    if (!showMore) return;
+    const handleOutside = (e) => {
+      if (moreWrapRef.current && !moreWrapRef.current.contains(e.target)) {
+        setShowMore(false);
+      }
+    };
+    const handleKey = (e) => {
+      if (e.key === "Escape") setShowMore(false);
+    };
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("touchstart", handleOutside);
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("touchstart", handleOutside);
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [showMore]);
 
   function handleLogout() {
     setShowMore(false);
@@ -56,6 +82,7 @@ function Navigation() {
           to="/"
           end
           className={({ isActive }) => (isActive ? "active" : "")}
+          onClick={() => setShowMore(false)}
         >
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
@@ -64,6 +91,7 @@ function Navigation() {
         <NavLink
           to="/events"
           className={({ isActive }) => (isActive ? "active" : "")}
+          onClick={() => setShowMore(false)}
         >
           <CalendarDays size={20} />
           <span>Events</span>
@@ -72,6 +100,7 @@ function Navigation() {
         <NavLink
           to="/explore"
           className={({ isActive }) => (isActive ? "active" : "")}
+          onClick={() => setShowMore(false)}
         >
           <MapPin size={20} />
           <span>Campus Map</span>
@@ -103,11 +132,13 @@ function Navigation() {
         </NavLink>
 
         {/* Mobile More menu */}
-        <div className="mobile-more-wrap">
+        <div className="mobile-more-wrap" ref={moreWrapRef}>
           <button
-            className="mobile-more-button"
+            className={`mobile-more-button ${showMore || isMoreRouteActive ? "active" : ""}`}
             onClick={() => setShowMore(!showMore)}
             type="button"
+            aria-expanded={showMore}
+            aria-label="More navigation options"
           >
             {showMore ? <X size={20} /> : <MoreHorizontal size={20} />}
             <span>More</span>
@@ -115,22 +146,22 @@ function Navigation() {
 
           {showMore && (
             <div className="mobile-more-menu">
-              <NavLink to="/announcements" onClick={() => setShowMore(false)}>
+              <NavLink to="/announcements" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setShowMore(false)}>
                 <Megaphone size={19} />
                 <span>Announcements</span>
               </NavLink>
 
-              <NavLink to="/community" onClick={() => setShowMore(false)}>
+              <NavLink to="/community" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setShowMore(false)}>
                 <UsersRound size={19} />
                 <span>Community</span>
               </NavLink>
 
-              <NavLink to="/notifications" onClick={() => setShowMore(false)}>
+              <NavLink to="/notifications" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setShowMore(false)}>
                 <Bell size={19} />
                 <span>Notifications</span>
               </NavLink>
 
-              <NavLink to="/settings" onClick={() => setShowMore(false)}>
+              <NavLink to="/settings" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setShowMore(false)}>
                 <Settings size={19} />
                 <span>Settings</span>
               </NavLink>

@@ -190,12 +190,187 @@
   border-color: #22d3ee;
 }
 
+.dashboard-profile-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dashboard-avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22D3EE, #6366F1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #070b15;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.35);
+}
+
 .profile-name {
   color: #cbd5e1;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
   margin: 0;
+}
+
+/* Status pills */
+
+.campus-status-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 12px;
+  font-size: 12px;
+}
+
+.campus-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.campus-pill-library {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #10b981;
+}
+
+.campus-pill-wifi {
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  color: #22d3ee;
+}
+
+.campus-pill-shuttle {
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: #c084fc;
+}
+
+/* Courses Modal */
+
+.courses-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.courses-modal {
+  background: #0f172a;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 18px;
+  max-width: 650px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  color: #f8fafc;
+  padding: 24px;
+}
+
+.courses-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.courses-modal-header h2 {
+  margin: 0 0 4px;
+  font-size: 21px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.courses-modal-header p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.courses-modal-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.courses-modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.courses-modal-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.courses-modal-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.courses-modal-code {
+  font-size: 11px;
+  font-weight: bold;
+  color: #22D3EE;
+  letter-spacing: 1px;
+}
+
+.courses-modal-card-top h4 {
+  margin: 4px 0 0;
+  font-size: 16px;
+}
+
+.courses-modal-grade {
+  background: rgba(34, 211, 238, 0.15);
+  color: #22D3EE;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.courses-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 13px;
+  color: #94a3b8;
 }
 
 /* ---------- WELCOME SECTION ---------- */
@@ -721,9 +896,9 @@
   }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 960px) {
   .dashboard {
-    padding: 25px;
+    padding: 22px;
   }
 
   .dashboard-topbar {
@@ -742,38 +917,79 @@
   .Events,
   .Announcement {
     width: 100%;
+    min-height: auto;
   }
 
   .welcome-section {
-    padding: 28px;
+    padding: 26px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
   .dashboard {
-    padding: 16px;
+    padding: 14px 14px 20px;
   }
 
   .dashboard-topbar {
     flex-wrap: wrap;
+    gap: 12px;
   }
 
-  .orbit-search {
-    max-width: none;
-    flex-basis: 100%;
+  .dashboard-profile-link {
+    order: 1;
+    margin-right: auto;
   }
 
   .notification-button {
+    order: 2;
     margin-left: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+  }
+
+  .dashboard-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .orbit-search {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+    height: 46px;
+    padding: 0 10px 0 14px;
+    gap: 10px;
+  }
+
+  .orbit-search input {
+    font-size: 13px;
+  }
+
+  .location-button {
+    width: 34px;
+    height: 34px;
   }
 
   .welcome-section {
-    min-height: 210px;
-    padding: 22px;
+    min-height: auto;
+    margin-top: 18px;
+    padding: 20px 18px;
+    border-radius: 16px;
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(5, 12, 29, 0.88) 0%,
+        rgba(5, 12, 29, 0.94) 100%
+      ),
+      url("/Neon Campus Nightscape.png");
   }
 
   .welcome-section h1 {
-    font-size: 27px;
+    font-size: clamp(22px, 6.2vw, 27px);
+    line-height: 1.25;
+    margin-bottom: 8px;
   }
 
   .welcome-section h1 span {
@@ -781,49 +997,160 @@
   }
 
   .welcome-section > span {
-    font-size: 12px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .campus-status-pills {
+    gap: 6px;
+    margin: 12px 0 6px;
+    font-size: 11px;
+  }
+
+  .campus-pill {
+    padding: 4px 10px;
+  }
+
+  .button {
+    margin-top: 14px;
+    min-height: 40px;
+    padding: 8px 16px;
+    font-size: 12.5px;
   }
 
   .Cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 10px;
+    margin-top: 18px;
   }
 
   .courses-card,
   .events-card,
   .announcements-card,
   .community-card {
-    min-height: 145px;
-    padding: 15px;
+    min-height: 124px;
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .card-top {
+    gap: 6px;
+  }
+
+  .card-top svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .card-top .text {
+    font-size: 10.5px;
+    text-align: right;
   }
 
   .courses-card h1,
   .events-card h1,
   .announcements-card h1,
   .community-card h1 {
-    font-size: 25px;
+    font-size: 24px;
+    margin: 12px 0 2px;
+  }
+
+  .courses-card p,
+  .events-card p,
+  .announcements-card p,
+  .community-card p {
+    font-size: 11.5px;
+  }
+
+  .Footer {
+    padding-top: 18px;
+    gap: 14px;
   }
 
   .Events-top {
-    padding: 16px;
+    padding: 15px 14px;
   }
 
   .Events-top h1 {
     font-size: 16px;
   }
 
+  .line {
+    margin: 0 14px;
+  }
+
   .dashboard-card,
   .Announcements-card {
-    padding: 12px;
-    gap: 9px;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .date {
+    min-width: 44px;
+    height: 48px;
+    padding: 5px;
+  }
+
+  .date h2 {
+    font-size: 18px;
+  }
+
+  .dashboard-card h1,
+  .Announcements-card h1 {
+    font-size: 12.5px;
   }
 
   .event-category {
     font-size: 9px;
-    padding: 5px 7px;
+    padding: 4px 8px;
   }
 
   .profile-name {
+    font-size: 13px;
+  }
+
+  .courses-modal-overlay {
+    padding: 12px;
+  }
+
+  .courses-modal {
+    padding: 18px 16px;
+    max-height: 85vh;
+    border-radius: 15px;
+  }
+
+  .courses-modal-header h2 {
+    font-size: 18px;
+  }
+
+  .courses-modal-card {
+    padding: 13px;
+  }
+
+  .courses-modal-meta {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .courses-card,
+  .events-card,
+  .announcements-card,
+  .community-card {
+    padding: 12px;
+    min-height: 115px;
+  }
+
+  .card-top .text {
+    font-size: 9.5px;
+  }
+
+  .dashboard-card {
+    flex-wrap: wrap;
+  }
+
+  .dashboard-card .event-category {
+    margin-left: 54px;
   }
 }

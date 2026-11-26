@@ -113,36 +113,23 @@ function Dashboard() {
             type="button"
             onClick={() => navigate("/explore")}
             title="Open Campus Explorer"
+            aria-label="Open Campus Explorer"
           >
             <MapPin size={18} />
           </button>
         </div>
 
-        <Link to="/notifications" className="notification-button" title="View alerts">
+        <Link to="/notifications" className="notification-button" title="View alerts" aria-label="View alerts">
           <Bell size={21} />
           <span className="notification-count">3</span>
         </Link>
 
         <Link
           to="/settings"
-          style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}
+          className="dashboard-profile-link"
           title="Account Settings"
         >
-          <div
-            style={{
-              width: "42px",
-              height: "42px",
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #22D3EE, #6366F1)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#070b15",
-              fontWeight: "bold",
-              fontSize: "14px",
-              boxShadow: "0 0 12px rgba(34, 211, 238, 0.35)",
-            }}
-          >
+          <div className="dashboard-avatar">
             {profile.avatarInitials || "OE"}
           </div>
           <p className="profile-name">{profile.fullName}</p>
@@ -157,49 +144,14 @@ function Dashboard() {
         <span>Stay Productive. Make the most of your Campus Life with ORBIT.</span>
 
         {/* Live Campus Status Banner */}
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "12px",
-          marginTop: "16px",
-          marginBottom: "16px",
-          fontSize: "12px",
-          color: "#94a3b8",
-        }}>
-          <span style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            background: "rgba(16, 185, 129, 0.12)",
-            border: "1px solid rgba(16, 185, 129, 0.25)",
-            padding: "5px 12px",
-            borderRadius: "999px",
-            color: "#10b981",
-          }}>
+        <div className="campus-status-pills">
+          <span className="campus-pill campus-pill-library">
             <BookOpen size={13} /> Library: Open until 10:00 PM
           </span>
-          <span style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            background: "rgba(34, 211, 238, 0.12)",
-            border: "1px solid rgba(34, 211, 238, 0.25)",
-            padding: "5px 12px",
-            borderRadius: "999px",
-            color: "#22d3ee",
-          }}>
+          <span className="campus-pill campus-pill-wifi">
             <Wifi size={13} /> Campus WiFi: Stable (eduroam)
           </span>
-          <span style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            background: "rgba(168, 85, 247, 0.12)",
-            border: "1px solid rgba(168, 85, 247, 0.25)",
-            padding: "5px 12px",
-            borderRadius: "999px",
-            color: "#c084fc",
-          }}>
+          <span className="campus-pill campus-pill-shuttle">
             <Bus size={13} /> Campus Shuttle: Operating
           </span>
         </div>
@@ -369,95 +321,48 @@ function Dashboard() {
       {/* Enrolled Courses Modal */}
       {showCoursesModal && (
         <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0, 0, 0, 0.75)",
-            backdropFilter: "blur(6px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 9999,
-            padding: "20px",
-          }}
+          className="courses-modal-overlay"
           onClick={() => setShowCoursesModal(false)}
         >
           <div
-            style={{
-              background: "#0f172a",
-              border: "1px solid rgba(34, 211, 238, 0.3)",
-              borderRadius: "18px",
-              maxWidth: "650px",
-              width: "100%",
-              maxHeight: "85vh",
-              overflowY: "auto",
-              boxShadow: "0 20px 45px rgba(0, 0, 0, 0.6)",
-              color: "#f8fafc",
-              padding: "24px",
-            }}
+            className="courses-modal"
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+            <div className="courses-modal-header">
               <div>
-                <h2 style={{ margin: "0 0 4px", fontSize: "22px", display: "flex", alignItems: "center", gap: "10px" }}>
-                  <GraduationCap color="#22D3EE" size={26} /> My Enrolled Courses
+                <h2>
+                  <GraduationCap color="#22D3EE" size={24} /> My Enrolled Courses
                 </h2>
-                <p style={{ margin: 0, color: "#94a3b8", fontSize: "13px" }}>
+                <p>
                   Current Semester Schedule • {profile.department}
                 </p>
               </div>
               <button
                 type="button"
+                className="courses-modal-close"
                 aria-label="Close enrolled courses modal"
                 onClick={() => setShowCoursesModal(false)}
-                style={{
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "none",
-                  color: "#fff",
-                  borderRadius: "50%",
-                  width: "32px",
-                  height: "32px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div className="courses-modal-list">
               {enrolledCourses.map((course) => (
-                <div
-                  key={course.id}
-                  style={{
-                    background: "rgba(255, 255, 255, 0.04)",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    borderRadius: "12px",
-                    padding: "16px",
-                  }}
-                >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
+                <div className="courses-modal-card" key={course.id}>
+                  <div className="courses-modal-card-top">
                     <div>
-                      <span style={{ fontSize: "11px", fontWeight: "bold", color: "#22D3EE", letterSpacing: "1px" }}>
+                      <span className="courses-modal-code">
                         {course.code} • {course.credits} Credits
                       </span>
-                      <h4 style={{ margin: "4px 0 0", fontSize: "16px" }}>{course.name}</h4>
+                      <h4>{course.name}</h4>
                     </div>
-                    <span style={{
-                      background: "rgba(34, 211, 238, 0.15)",
-                      color: "#22D3EE",
-                      fontSize: "12px",
-                      fontWeight: "bold",
-                      padding: "2px 8px",
-                      borderRadius: "6px",
-                    }}>
+                    <span className="courses-modal-grade">
                       Grade: {course.grade}
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", fontSize: "13px", color: "#94a3b8" }}>
+                  <div className="courses-modal-meta">
                     <span>📍 {course.room}</span>
                     <span>🕒 {course.schedule}</span>
                     <span>👤 {course.instructor}</span>

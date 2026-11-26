@@ -3,16 +3,27 @@
   display: flex;
   min-height: 100vh;
   background: #080D19;
+  overflow-x: clip;
 }
 
 .main-content {
   flex: 1;
   min-width: 0;
   color: white;
+  overflow-x: clip;
 }
 
-@media (max-width: 650px) {
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (max-width: 768px) {
   .main-content {
-    padding-bottom: 90px;
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
   }
 }

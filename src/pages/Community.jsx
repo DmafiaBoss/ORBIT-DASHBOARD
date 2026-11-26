@@ -221,12 +221,12 @@ function Community() {
             />
           </div>
 
-          <Link to="/notifications" className="community-notification" title="Alerts">
+          <Link to="/notifications" className="community-notification" title="Alerts" aria-label="View notifications">
             <Bell size={20} />
             <span></span>
           </Link>
 
-          <Link to="/settings" style={{ textDecoration: "none" }}>
+          <Link to="/settings" className="community-profile-link">
             <div className="community-profile">{profile.avatarInitials || "OE"}</div>
           </Link>
         </div>
@@ -371,64 +371,34 @@ function Community() {
 
                     {/* Expandable comments thread */}
                     {activeCommentPostId === post.id && (
-                      <div style={{
-                        marginTop: "16px",
-                        paddingTop: "14px",
-                        borderTop: "1px solid rgba(148, 163, 184, 0.12)",
-                      }}>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "12px" }}>
+                      <div className="community-comment-thread">
+                        <div className="community-comment-list">
                           {post.commentsList && post.commentsList.length > 0 ? (
                             post.commentsList.map((comm) => (
-                              <div key={comm.id} style={{
-                                background: "rgba(15, 23, 42, 0.7)",
-                                padding: "10px 14px",
-                                borderRadius: "10px",
-                                fontSize: "13px",
-                              }}>
-                                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-                                  <strong style={{ color: "#22D3EE" }}>{comm.author}</strong>
-                                  <span style={{ fontSize: "11px", color: "#64748b" }}>{comm.time}</span>
+                              <div className="community-comment-item" key={comm.id}>
+                                <div className="community-comment-meta">
+                                  <strong>{comm.author}</strong>
+                                  <span>{comm.time}</span>
                                 </div>
-                                <p style={{ margin: 0, color: "#cbd5e1" }}>{comm.text}</p>
+                                <p>{comm.text}</p>
                               </div>
                             ))
                           ) : (
-                            <p style={{ fontSize: "12px", color: "#64748b", margin: 0 }}>No comments yet. Start the conversation!</p>
+                            <p className="community-comment-empty">No comments yet. Start the conversation!</p>
                           )}
                         </div>
 
                         <form
+                          className="community-comment-form"
                           onSubmit={(e) => addComment(e, post.id)}
-                          style={{ display: "flex", gap: "8px" }}
                         >
                           <input
                             type="text"
                             placeholder="Write a reply..."
                             value={commentInput}
                             onChange={(e) => setCommentInput(e.target.value)}
-                            style={{
-                              flex: 1,
-                              background: "rgba(15, 23, 42, 0.8)",
-                              border: "1px solid rgba(148, 163, 184, 0.2)",
-                              borderRadius: "8px",
-                              padding: "8px 12px",
-                              color: "#fff",
-                              fontSize: "13px",
-                              outline: "none",
-                            }}
                           />
-                          <button
-                            type="submit"
-                            style={{
-                              background: "#22D3EE",
-                              color: "#0f172a",
-                              fontWeight: "bold",
-                              border: "none",
-                              borderRadius: "8px",
-                              padding: "8px 14px",
-                              cursor: "pointer",
-                            }}
-                          >
+                          <button type="submit">
                             Reply
                           </button>
                         </form>

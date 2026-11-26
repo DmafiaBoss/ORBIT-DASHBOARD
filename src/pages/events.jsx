@@ -189,24 +189,11 @@ function Events() {
         </div>
 
         <div className="events-user">
-          <Link to="/notifications" className="events-notification" title="Alerts">
+          <Link to="/notifications" className="events-notification" title="Alerts" aria-label="View notifications">
             <Bell size={21} />
           </Link>
-          <Link to="/settings" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px", color: "inherit" }}>
-            <div
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #22D3EE, #6366F1)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#070b15",
-                fontWeight: "bold",
-                fontSize: "13px",
-              }}
-            >
+          <Link to="/settings" className="events-profile-link">
+            <div className="events-avatar-initials">
               {profile.avatarInitials || "OE"}
             </div>
             <span>{profile.fullName}</span>
@@ -380,120 +367,59 @@ function Events() {
       {/* Event Details Modal */}
       {selectedEvent && (
         <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0, 0, 0, 0.75)",
-            backdropFilter: "blur(6px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 9999,
-            padding: "20px",
-          }}
+          className="event-modal-overlay"
           onClick={() => setSelectedEvent(null)}
         >
           <div
-            style={{
-              background: "#0f172a",
-              border: "1px solid rgba(34, 211, 238, 0.3)",
-              borderRadius: "18px",
-              maxWidth: "540px",
-              width: "100%",
-              overflow: "hidden",
-              boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5)",
-              color: "#f8fafc",
-            }}
+            className="event-modal"
             onClick={(e) => e.stopPropagation()}
           >
             <div
+              className="event-modal-hero"
               style={{
-                height: "180px",
                 backgroundImage: `linear-gradient(180deg, transparent, #0f172a), url("${selectedEvent.image}")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                position: "relative",
-                padding: "20px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
               }}
             >
-              <span
-                style={{
-                  background: "#22d3ee",
-                  color: "#0f172a",
-                  fontWeight: "bold",
-                  fontSize: "12px",
-                  padding: "4px 10px",
-                  borderRadius: "999px",
-                }}
-              >
+              <span className="event-modal-badge">
                 {selectedEvent.category}
               </span>
               <button
                 type="button"
+                className="event-modal-close"
                 aria-label="Close event details"
                 onClick={() => setSelectedEvent(null)}
-                style={{
-                  background: "rgba(0, 0, 0, 0.5)",
-                  border: "none",
-                  color: "#fff",
-                  borderRadius: "50%",
-                  width: "32px",
-                  height: "32px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                }}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div style={{ padding: "24px" }}>
-              <h2 style={{ margin: "0 0 12px", fontSize: "22px" }}>{selectedEvent.title}</h2>
-              <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: "1.6", margin: "0 0 20px" }}>
-                {selectedEvent.description}
-              </p>
+            <div className="event-modal-body">
+              <h2>{selectedEvent.title}</h2>
+              <p>{selectedEvent.description}</p>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
-                <div style={{ background: "rgba(255, 255, 255, 0.04)", padding: "12px", borderRadius: "10px" }}>
-                  <small style={{ color: "#64748b", display: "block" }}>Date & Time</small>
-                  <strong style={{ fontSize: "13px" }}>{selectedEvent.date} · {selectedEvent.time}</strong>
+              <div className="event-modal-grid">
+                <div className="event-modal-info-box">
+                  <small>Date & Time</small>
+                  <strong>{selectedEvent.date} · {selectedEvent.time}</strong>
                 </div>
-                <div style={{ background: "rgba(255, 255, 255, 0.04)", padding: "12px", borderRadius: "10px" }}>
-                  <small style={{ color: "#64748b", display: "block" }}>Venue</small>
-                  <strong style={{ fontSize: "13px" }}>{selectedEvent.venue}</strong>
+                <div className="event-modal-info-box">
+                  <small>Venue</small>
+                  <strong>{selectedEvent.venue}</strong>
                 </div>
               </div>
 
               {selectedEvent.speaker && (
-                <div style={{ background: "rgba(34, 211, 238, 0.06)", border: "1px solid rgba(34, 211, 238, 0.2)", padding: "12px", borderRadius: "10px", marginBottom: "20px" }}>
-                  <small style={{ color: "#22d3ee", display: "block", fontWeight: "600" }}>Host / Speaker</small>
-                  <span style={{ fontSize: "13px" }}>{selectedEvent.speaker}</span>
+                <div className="event-modal-speaker">
+                  <small>Host / Speaker</small>
+                  <span>{selectedEvent.speaker}</span>
                 </div>
               )}
 
-              <div style={{ display: "flex", gap: "12px" }}>
+              <div className="event-modal-actions">
                 <button
+                  type="button"
+                  className={`event-modal-rsvp-btn ${rsvps[selectedEvent.id] ? "registered" : ""}`}
                   onClick={(e) => handleRegisterToggle(e, selectedEvent.id)}
-                  style={{
-                    flex: 1,
-                    padding: "12px",
-                    borderRadius: "10px",
-                    border: "none",
-                    background: rsvps[selectedEvent.id] ? "#10b981" : "#22d3ee",
-                    color: rsvps[selectedEvent.id] ? "#fff" : "#0f172a",
-                    fontWeight: "bold",
-                    fontSize: "14px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                  }}
                 >
                   {rsvps[selectedEvent.id] ? (
                     <>

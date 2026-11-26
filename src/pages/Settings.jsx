@@ -118,21 +118,7 @@ function Settings() {
   return (
     <div className="settings-page">
       {showToast && (
-        <div style={{
-          position: "fixed",
-          top: "24px",
-          right: "24px",
-          background: "#10b981",
-          color: "#ffffff",
-          padding: "12px 20px",
-          borderRadius: "12px",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontWeight: "600",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
-          zIndex: 10000,
-        }}>
+        <div className="settings-toast">
           <CheckCircle2 size={18} />
           Settings saved successfully!
         </div>

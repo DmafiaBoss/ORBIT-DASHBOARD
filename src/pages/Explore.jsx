@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -158,6 +158,16 @@ function Explore() {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [navigating, setNavigating] = useState(false);
+  const mapAreaRef = useRef(null);
+
+  const handleSelectLocation = (location) => {
+    setSelectedLocation(location);
+    if (typeof window !== "undefined" && window.innerWidth <= 768) {
+      setTimeout(() => {
+        mapAreaRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 60);
+    }
+  };
 
   const locationsPerPage = 5;
 
@@ -250,7 +260,7 @@ function Explore() {
                   className={`explore-place ${
                     selectedLocation?.id === location.id ? "selected" : ""
                   }`}
-                  onClick={() => setSelectedLocation(location)}
+                  onClick={() => handleSelectLocation(location)}
                 >
                   <span className="place-icon">
                     <LocationIcon size={19} />
@@ -294,7 +304,7 @@ function Explore() {
           </div>
         </aside>
 
-        <main className="explore-map-area">
+        <main className="explore-map-area" ref={mapAreaRef}>
           <MapContainer
             center={[6.515, 3.389]}
             zoom={16}
@@ -337,6 +347,8 @@ function Explore() {
           {selectedLocation && (
             <div className="explore-details">
               <button
+                type="button"
+                aria-label="Close location details"
                 className="close-details"
                 onClick={() => setSelectedLocation(null)}
               >
@@ -350,33 +362,20 @@ function Explore() {
               <h2>{selectedLocation.name}</h2>
               <p>{selectedLocation.description}</p>
 
-              <div style={{ display: "flex", gap: "16px", margin: "14px 0", fontSize: "13px", color: "#94a3b8" }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+              <div className="explore-details-meta">
+                <span>
                   <Clock size={15} color="#22d3ee" /> {selectedLocation.hours}
                 </span>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                <span>
                   <Footprints size={15} color="#a855f7" /> {selectedLocation.distance}
                 </span>
               </div>
 
-              <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
+              <div style={{ display: "flex", gap: "10px", marginTop: "14px" }}>
                 <button
                   type="button"
+                  className={`explore-nav-btn ${navigating ? "navigating" : ""}`}
                   onClick={handleStartNavigation}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    background: navigating ? "#10b981" : "#22d3ee",
-                    color: "#0f172a",
-                    fontWeight: "bold",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "8px 16px",
-                    fontSize: "13px",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
                 >
                   <Navigation size={15} />
                   {navigating ? "Routing Calculated!" : "Start Walking Route"}
